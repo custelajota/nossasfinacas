@@ -1,0 +1,2086 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Nossas Finanças - Casal</title>
+    
+    <!-- Fontes: IBM Plex Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <!-- Chart.js (versão fixa, sem bloquear a renderização) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="theme-color" content="#FFD21F">
+
+    
+
+    <style>
+/* ===== Nossas Finanças — visual "neo-brutalista neon" (CSS puro, sem Tailwind) ===== */
+:root{
+  --ink:#0B0B0F; --on-neon:#0B0B0F; --paper:#FFFDF7; --paper-2:#F3EFE2; --muted:#4A4A55;
+  --bg:#FFD21F; --border:#0B0B0F; --shadow:#0B0B0F;
+  --cyan:#00F3FF; --magenta:#FF00FF; --purple:#BD00FF; --lime:#CCFF00; --yellow:#FFD21F;
+  --pos:#0A6B2B; --neg:#C2003D; --focus:#5B21B6;
+  --bw:2.5px; --r:16px;
+}
+.dark{
+  --ink:#F4F1EA; --paper:#1A1D2D; --paper-2:#12141F; --muted:#A9AEC4;
+  --bg:#0A0B12; --border:#F4F1EA; --shadow:#BD00FF;
+  --pos:#CCFF00; --neg:#FF6BF5; --focus:#00F3FF;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100vh;display:flex;justify-content:center;font-family:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.4;color:var(--ink);background:var(--bg);transition:background-color .3s}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0;padding:0}
+h1,h2,h3,h4,p{margin:0}
+i{font-style:normal}
+.hidden{display:none!important}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:absolute;left:-999px;top:8px;z-index:100;background:var(--paper);color:var(--ink);padding:10px 16px;border:var(--bw) solid var(--border);border-radius:12px;font-weight:700}
+.skip-link:focus{left:8px}
+.pos{color:var(--pos)} .neg{color:var(--neg)} .muted{color:var(--muted)} .strike{text-decoration:line-through;color:var(--muted)}
+.spin,.animate-spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes slideFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@keyframes pulseBox{0%,100%{box-shadow:3px 3px 0 var(--shadow)}50%{box-shadow:6px 6px 0 var(--shadow)}}
+
+/* ---- fundo decorativo ---- */
+.bg-shapes{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.shape-circle{position:absolute;width:46vmin;height:46vmin;border-radius:50%;background:var(--magenta);left:-14vmin;top:16vh}
+.shape-wedge{position:absolute;right:-4vw;bottom:-4vh;width:52vw;height:46vh;background:var(--purple);clip-path:polygon(0 32%,100% 0,100% 100%,0 100%)}
+.dark .bg-shapes{opacity:.2}
+@media(max-width:767px){.bg-shapes{display:none}}
+
+/* ---- casca do app ---- */
+.app{position:relative;z-index:1;width:100%;display:flex;flex-direction:column;background:var(--paper);color:var(--ink)}
+@media(min-width:768px){
+  .app{flex-direction:row;width:calc(100% - 40px);max-width:1240px;margin:20px;height:calc(100vh - 40px);height:calc(100dvh - 40px);overflow:hidden;border:3px solid var(--border);border-radius:28px;box-shadow:8px 8px 0 var(--shadow)}
+}
+.content{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column}
+.main{flex:1;min-height:0;padding:20px 18px 130px}
+.main:focus{outline:none}
+@media(min-width:768px){.main{overflow-y:auto;padding:26px 30px 40px}}
+
+/* ---- sidebar ---- */
+.sidebar{display:none;flex-direction:column;justify-content:space-between;gap:24px;width:250px;flex:none;padding:18px;border-right:3px solid var(--border);background:var(--paper);overflow-y:auto;transition:width .25s}
+@media(min-width:768px){.sidebar{display:flex}}
+.sidebar.collapsed{width:88px;padding:18px 12px}
+.sidebar.collapsed .sidebar-label{display:none}
+.sidebar.collapsed .nav-item,.sidebar.collapsed .btn{justify-content:center;padding-left:0;padding-right:0}
+.sidebar-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:22px}
+.sidebar.collapsed .sidebar-top{flex-direction:column;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-logo{width:42px;height:42px;flex:none;display:grid;place-items:center;font-weight:700;font-size:21px;background:var(--yellow);color:var(--on-neon);border:var(--bw) solid var(--border);border-radius:12px;box-shadow:3px 3px 0 var(--shadow)}
+.brand-name{font-weight:700;font-size:17px;line-height:1.05;letter-spacing:-.01em}
+.side-nav,.side-actions{display:flex;flex-direction:column;gap:10px}
+.nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border:var(--bw) solid transparent;border-radius:14px;font-weight:600;font-size:14px;text-align:left;color:var(--ink);transition:transform .1s,box-shadow .1s,background .1s}
+.nav-item i{width:22px;text-align:center;font-size:16px;flex:none}
+.nav-item:hover{background:var(--paper-2)}
+.nav-item.is-active{background:var(--cyan);color:var(--on-neon);border-color:var(--border);box-shadow:3px 3px 0 var(--shadow)}
+.nav-divider{height:3px;background:var(--border);border-radius:3px;margin:6px 0;opacity:.9}
+
+/* ---- topo ---- */
+.topbar{position:sticky;top:0;z-index:20;display:flex;flex-direction:column;gap:12px;padding:16px 18px 14px;background:var(--paper);border-bottom:3px solid var(--border)}
+@media(min-width:768px){.topbar{position:static;flex-direction:row;align-items:center;justify-content:space-between;padding:18px 30px}}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.page-title{font-size:clamp(26px,6vw,34px);font-weight:700;letter-spacing:-.03em;line-height:1.05}
+.hl{display:inline-block;padding:0 .24em;background:var(--cyan);color:var(--on-neon);border:var(--bw) solid var(--border);border-radius:10px;box-shadow:3px 3px 0 var(--shadow);transform:rotate(-1.5deg)}
+.mobile-actions{display:flex;gap:10px}
+@media(min-width:768px){.mobile-actions{display:none}}
+.topbar-controls{display:flex;align-items:center;gap:10px}
+.month{flex:1;display:flex;align-items:center;gap:4px;padding:4px;background:var(--paper);border:var(--bw) solid var(--border);border-radius:999px;box-shadow:3px 3px 0 var(--shadow)}
+.month button{width:38px;height:38px;flex:none;display:grid;place-items:center;border-radius:50%}
+.month button:hover{background:var(--paper-2)}
+.month span{flex:1;text-align:center;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+@media(min-width:768px){.month{flex:none;min-width:240px}}
+
+/* ---- blocos básicos ---- */
+.nb{background:var(--paper);color:var(--ink);border:var(--bw) solid var(--border);border-radius:var(--r);box-shadow:4px 4px 0 var(--shadow)}
+.folder{position:relative;margin-top:18px}
+.folder::before{content:'';position:absolute;left:16px;top:calc(-1 * (var(--bw) + 16px));width:92px;height:16px;background:var(--tab,var(--cyan));border:var(--bw) solid var(--border);border-bottom:0;border-radius:10px 10px 0 0}
+.tab-cyan{--tab:var(--cyan)} .tab-magenta{--tab:var(--magenta)} .tab-lime{--tab:var(--lime)} .tab-purple{--tab:var(--purple)} .tab-yellow{--tab:var(--yellow)}
+.over{--tab:var(--magenta)}
+.grid-2{display:grid;grid-template-columns:1fr;gap:0 22px}
+.grid-3{display:grid;grid-template-columns:1fr;gap:0 22px}
+@media(min-width:768px){.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:1fr 1fr}}
+@media(min-width:1100px){.grid-3{grid-template-columns:1fr 1fr 1fr}}
+.stack{display:flex;flex-direction:column;gap:12px}
+.section-title{font-size:20px;font-weight:700;letter-spacing:-.02em;margin:24px 0 4px}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.view-head h2{font-size:clamp(24px,5vw,30px);font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.view-head p{font-size:13px;color:var(--muted);margin-top:2px}
+.help{font-size:12px;color:var(--muted)}
+.empty{text-align:center;padding:48px 0;color:var(--muted)}
+.empty i{display:block;font-size:42px;margin-bottom:10px}
+.view-section{display:none}
+.view-section.active{display:block;animation:slideFade .25s ease-out}
+
+.ico{display:grid;place-items:center;flex:none;width:36px;height:36px;border:2px solid var(--border);border-radius:10px;background:var(--c,var(--yellow));color:var(--on-neon);font-size:15px}
+.ico-cyan{--c:var(--cyan)} .ico-magenta{--c:var(--magenta)} .ico-lime{--c:var(--lime)} .ico-purple{--c:var(--purple)} .ico-yellow{--c:var(--yellow)} .ico-paper{--c:var(--paper);color:var(--ink)}
+.ico-lg{width:42px;height:42px;font-size:17px}
+
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:var(--paper);color:var(--ink);border:2px solid var(--border);border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.25;white-space:nowrap}
+.chip b{font-weight:700;text-transform:none;letter-spacing:0}
+.chip-cyan{background:var(--cyan);color:var(--on-neon)} .chip-magenta{background:var(--magenta);color:var(--on-neon)} .chip-lime{background:var(--lime);color:var(--on-neon)} .chip-purple{background:var(--purple);color:var(--on-neon)} .chip-yellow{background:var(--yellow);color:var(--on-neon)}
+button.chip:hover{transform:translate(-1px,-1px)}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ---- botões ---- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;background:var(--yellow);color:var(--on-neon);border:var(--bw) solid var(--border);border-radius:14px;box-shadow:3px 3px 0 var(--shadow);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;transition:transform .08s,box-shadow .08s}
+.btn:hover,.icon-btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--shadow)}
+.btn:active,.icon-btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--shadow)}
+.btn-cyan{background:var(--cyan)} .btn-lime{background:var(--lime)} .btn-magenta{background:var(--magenta)} .btn-purple{background:var(--purple)}
+.btn-paper{background:var(--paper);color:var(--ink)}
+.btn-block{width:100%}
+.btn-sm{padding:7px 12px;font-size:12px;box-shadow:2px 2px 0 var(--shadow)}
+.icon-btn{display:grid;place-items:center;flex:none;width:44px;height:44px;background:var(--paper);color:var(--ink);border:var(--bw) solid var(--border);border-radius:12px;box-shadow:3px 3px 0 var(--shadow);font-size:17px;transition:transform .08s,box-shadow .08s}
+.icon-btn-sm{width:36px;height:36px;font-size:14px;border-radius:10px;border-width:2px;box-shadow:2px 2px 0 var(--shadow)}
+.icon-btn-flat{box-shadow:none}
+.icon-btn-flat:hover{box-shadow:none;background:var(--c,var(--cyan));color:var(--on-neon);transform:none}
+.icon-btn-flat:active{transform:none}
+.hover-lime{--c:var(--lime)} .hover-magenta{--c:var(--magenta)}
+
+/* ---- campos ---- */
+.input,.select{width:100%;padding:11px 14px;background:var(--paper);color:var(--ink);border:var(--bw) solid var(--border);border-radius:12px;box-shadow:3px 3px 0 var(--shadow);font-size:14px;font-weight:500;appearance:none;-webkit-appearance:none}
+.input::placeholder{color:var(--muted);opacity:.8}
+.input:focus,.select:focus{outline:3px solid var(--focus);outline-offset:2px}
+.select{padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5 7 7l5.5-5.5' fill='none' stroke='%230B0B0F' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center}
+.dark .select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5 7 7l5.5-5.5' fill='none' stroke='%23F4F1EA' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.select-neon{background-color:var(--lime);color:var(--on-neon);font-weight:700;width:auto;min-width:150px}
+.dark .select-neon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5 7 7l5.5-5.5' fill='none' stroke='%230B0B0F' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.form{display:flex;flex-direction:column;gap:16px}
+.field label,.label{display:block;margin:0 0 7px 2px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.money{position:relative}
+.money > span{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:700}
+.money .input{padding-left:46px;font-size:18px;font-weight:700}
+.search{position:relative}
+.search > i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.search .input{padding-left:40px}
+.switch{appearance:none;-webkit-appearance:none;position:relative;flex:none;width:48px;height:27px;margin:0;background:var(--paper-2);border:var(--bw) solid var(--border);border-radius:999px;cursor:pointer;transition:background .15s}
+.switch::after{content:'';position:absolute;top:3px;left:3px;width:15px;height:15px;border-radius:50%;background:var(--border);transition:transform .15s}
+.switch:checked{background:var(--lime)}
+.switch:checked::after{transform:translateX(21px);background:#0B0B0F}
+.switch:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.check-row{display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--paper-2);border:var(--bw) solid var(--border);border-radius:12px}
+.check-row label{display:block;font-weight:700;font-size:13px;cursor:pointer}
+.check-row .help{display:block}
+.toggle{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:13px;cursor:pointer;user-select:none}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg label{display:block;cursor:pointer}
+.seg-item{display:block;text-align:center;padding:12px;background:var(--paper);border:var(--bw) solid var(--border);border-radius:12px;box-shadow:3px 3px 0 var(--shadow);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;transition:transform .08s,box-shadow .08s}
+.seg input:checked + .seg-expense{background:var(--magenta);color:var(--on-neon);transform:translate(3px,3px);box-shadow:none}
+.seg input:checked + .seg-income{background:var(--lime);color:var(--on-neon);transform:translate(3px,3px);box-shadow:none}
+.seg input:focus-visible + .seg-item{outline:3px solid var(--focus);outline-offset:2px}
+.swatches{display:flex;flex-wrap:wrap;gap:12px;margin:4px 0 0 2px}
+.swatch{cursor:pointer}
+.swatch-dot{display:block;width:40px;height:40px;border:var(--bw) solid var(--border);border-radius:12px;box-shadow:2px 2px 0 var(--shadow)}
+.swatch input:checked + .swatch-dot{outline:3px solid var(--ink);outline-offset:2px;transform:translate(2px,2px);box-shadow:none}
+.swatch input:focus-visible + .swatch-dot{outline:3px solid var(--focus);outline-offset:3px}
+fieldset{border:0;padding:0;margin:0}
+legend{padding:0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-left:2px}
+button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* ---- avisos ---- */
+.notice{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;margin-bottom:16px;color:var(--on-neon);border:var(--bw) solid var(--border);border-radius:14px;box-shadow:3px 3px 0 var(--shadow)}
+.notice-yellow{background:var(--yellow)} .notice-cyan{background:var(--cyan)} .notice-magenta{background:var(--magenta);animation:pulseBox 2s ease-in-out infinite}
+.notice-main{display:flex;align-items:center;gap:12px;min-width:0}
+.notice strong{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+.notice p{font-size:13px;font-weight:500}
+.reminders{display:grid;grid-template-columns:1fr;gap:0 16px}
+@media(min-width:768px){.reminders{grid-template-columns:1fr 1fr}}
+
+/* ---- painéis do dashboard ---- */
+.panel{padding:18px;min-height:172px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;user-select:none}
+.panel-cyan{background:var(--cyan);color:var(--on-neon)}
+.view-available{display:none;flex-direction:column;gap:8px}
+.view-available.active{display:flex;animation:slideFade .25s ease-out}
+.panel-label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.panel-label .lbl{display:flex;align-items:center;gap:10px}
+.big{font-size:clamp(30px,7vw,40px);font-weight:700;letter-spacing:-.03em;line-height:1.05}
+.hint{opacity:.6;font-size:13px}
+.proj{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px}
+.proj-value{font-size:clamp(24px,6vw,32px);font-weight:700;letter-spacing:-.03em}
+.chart-card{padding:18px}
+.chart-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+.chart-title h3{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.chart-wrap{position:relative;height:150px;width:100%}
+.chart-wrap-lg{height:230px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.tile{padding:10px 12px;background:var(--paper-2);border:2px solid var(--border);border-left:8px solid var(--c,var(--cyan));border-radius:12px;min-width:0}
+.tile p:first-child{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile .v{font-size:17px;font-weight:700;margin:2px 0 6px}
+
+/* ---- extrato ---- */
+.filters{padding:16px;display:flex;flex-direction:column;gap:14px;margin-bottom:22px}
+.filters .grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:768px){.filters .grid{grid-template-columns:1fr 1fr}.filters .grid-4{grid-template-columns:repeat(3,1fr)}}
+.day-group{display:flex;flex-direction:column;gap:12px;margin-bottom:12px}
+.day-head{position:sticky;top:var(--topbar-h,0);z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;background:var(--paper);border-bottom:2px dashed var(--border)}
+@media(min-width:768px){.day-head{top:-26px;padding-top:10px}}
+.day-head h3{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.tx{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:var(--paper);border:var(--bw) solid var(--border);border-radius:14px;box-shadow:3px 3px 0 var(--shadow)}
+.tx-left{display:flex;align-items:center;gap:12px;min-width:0}
+.tx-body{min-width:0}
+.tx-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.tx-title{font-weight:700;font-size:15px;overflow-wrap:anywhere}
+.tx-meta{display:block;margin-top:3px;font-size:12px;color:var(--muted)}
+.tx-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex:none}
+.tx-amount{font-weight:700;font-size:15px;white-space:nowrap}
+.tx-actions{display:flex;gap:6px}
+@media(min-width:640px){.tx-right{flex-direction:row;align-items:center;gap:14px}}
+.datebox{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;width:42px;height:42px;background:var(--paper-2);border:2px solid var(--border);border-radius:10px;line-height:1.05}
+.datebox b{font-size:14px}.datebox span{font-size:10px;font-weight:700;text-transform:uppercase;color:var(--muted)}
+
+/* ---- categorias / metas / cartões ---- */
+.item-card{padding:16px;display:flex;flex-direction:column;gap:14px;margin-bottom:6px}
+.item-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.item-title{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.item-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.item-actions{display:flex;gap:6px;flex:none}
+.item-values{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
+.item-amount{font-size:20px;font-weight:700;letter-spacing:-.02em}
+.item-pct{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.bar{height:16px;background:var(--paper-2);border:2px solid var(--border);border-radius:999px;overflow:hidden}
+.bar > i{display:block;height:100%;background:var(--tab,var(--cyan));transition:width .8s}
+.bar > i.edge{border-right:2px solid var(--border)}
+.manage-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;background:var(--paper-2);border:var(--bw) solid var(--border);border-radius:14px}
+.manage-main{display:flex;align-items:center;gap:12px;min-width:0}
+.manage-bar{width:10px;height:42px;flex:none;border:2px solid var(--border);border-radius:6px}
+.manage-name{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ---- modais ---- */
+.modal{display:none;position:fixed;inset:0;z-index:60;flex-direction:column;justify-content:flex-end;background:rgba(10,10,15,.66)}
+.modal.active{display:flex}
+@media(min-width:768px){.modal{justify-content:center;align-items:center}}
+.modal-content{width:100%;max-height:92vh;overflow-y:auto;padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));background:var(--paper);color:var(--ink);border:3px solid var(--border);border-bottom:0;border-radius:26px 26px 0 0;animation:sheetUp .25s ease-out}
+@media(min-width:768px){.modal-content{max-width:520px;max-height:90vh;border:3px solid var(--border);border-radius:24px;box-shadow:8px 8px 0 var(--shadow)}}
+.sheet-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
+.sheet-head h2{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.link-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:12px 14px;text-align:left;background:var(--paper-2);border:var(--bw) solid var(--border);border-radius:12px}
+.link-row strong{display:block;font-size:13px}
+.link-btn{font-size:12px;font-weight:700;text-decoration:underline}
+
+/* ---- toast ---- */
+#toast-container{position:fixed;top:16px;left:50%;transform:translateX(-50%);width:min(92vw,380px);display:flex;flex-direction:column;gap:10px;z-index:90;pointer-events:none}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--cyan);color:var(--on-neon);border:var(--bw) solid var(--border);border-radius:14px;box-shadow:4px 4px 0 var(--shadow);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.04em;opacity:0;transform:translateY(-14px);transition:opacity .25s,transform .25s}
+.toast.show{opacity:1;transform:none}
+.toast-error{background:var(--magenta)}
+
+/* ---- navegação mobile ---- */
+.mobile-nav-wrap{position:fixed;left:0;right:0;bottom:0;z-index:40}
+@media(min-width:768px){.mobile-nav-wrap{display:none}}
+.mobile-nav{display:flex;align-items:center;justify-content:space-between;height:70px;padding:0 6px env(safe-area-inset-bottom,0px);background:var(--paper);border-top:3px solid var(--border)}
+.nav-btn{width:20%;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--muted)}
+.nav-btn .nav-ico{display:grid;place-items:center;width:46px;height:30px;border:2px solid transparent;border-radius:10px;font-size:16px}
+.nav-btn.is-active{color:var(--ink)}
+.nav-btn.is-active .nav-ico{background:var(--cyan);color:var(--on-neon);border-color:var(--border);box-shadow:2px 2px 0 var(--shadow)}
+.nav-gap{width:20%}
+.fab{position:absolute;left:50%;top:-30px;transform:translateX(-50%);width:62px;height:62px;display:grid;place-items:center;background:var(--yellow);color:var(--on-neon);border:3px solid var(--border);border-radius:18px;box-shadow:4px 4px 0 var(--shadow);font-size:24px;transition:box-shadow .08s}
+.fab:active{box-shadow:0 0 0 var(--shadow);transform:translate(calc(-50% + 3px),3px)}
+
+@media(max-width:767px){input,select,textarea{font-size:16px!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+    </style>
+</head>
+<body>
+    <a href="#main-content" class="skip-link">Pular para o conteúdo</a>
+    <div class="bg-shapes" aria-hidden="true"><span class="shape-circle"></span><span class="shape-wedge"></span></div>
+    <div id="toast-container" role="status" aria-live="polite"></div>
+
+    <div id="app-container" class="app">
+
+        <!-- SIDEBAR (desktop) -->
+        <aside id="main-sidebar" class="sidebar">
+            <div>
+                <div class="sidebar-top">
+                    <div class="brand">
+                        <span class="brand-logo" aria-hidden="true">F</span>
+                        <span class="sidebar-label brand-name">Nossas<br>Finanças</span>
+                    </div>
+                    <button id="btn-sidebar-toggle" class="icon-btn icon-btn-sm" onclick="toggleSidebar()" aria-expanded="true" aria-label="Recolher ou expandir menu" title="Recolher ou expandir menu"><i aria-hidden="true" id="sidebar-toggle-icon" class="fa-solid fa-angles-left"></i></button>
+                </div>
+                <nav aria-label="Navegação principal" class="side-nav">
+                    <button class="sidebar-nav-btn nav-item is-active" data-target="dashboard" aria-current="page" onclick="switchView('dashboard')" title="Visão Geral" aria-label="Visão Geral"><i aria-hidden="true" class="fa-solid fa-chart-pie"></i><span class="sidebar-label">Visão Geral</span></button>
+                    <button class="sidebar-nav-btn nav-item" data-target="transactions" onclick="switchView('transactions')" title="Extrato" aria-label="Extrato"><i aria-hidden="true" class="fa-solid fa-list-ul"></i><span class="sidebar-label">Extrato</span></button>
+                    <button class="sidebar-nav-btn nav-item" data-target="categories" onclick="switchView('categories')" title="Categorias" aria-label="Categorias"><i aria-hidden="true" class="fa-solid fa-tags"></i><span class="sidebar-label">Categorias</span></button>
+                    <button class="sidebar-nav-btn nav-item" data-target="goals" onclick="switchView('goals')" title="Metas" aria-label="Metas"><i aria-hidden="true" class="fa-solid fa-bullseye"></i><span class="sidebar-label">Metas</span></button>
+                </nav>
+            </div>
+            <div class="side-actions">
+                <button class="btn btn-block" onclick="openTransactionModal()" title="Novo Lançamento" aria-label="Novo Lançamento"><i aria-hidden="true" class="fa-solid fa-plus"></i><span class="sidebar-label">Novo Lançamento</span></button>
+                <div class="nav-divider"></div>
+                <button class="nav-item" onclick="toggleDarkMode()" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro"><i aria-hidden="true" id="theme-icon-sb" class="fa-solid fa-sun"></i><span id="theme-text-sb" class="sidebar-label">Tema</span></button>
+                <button id="btn-sync-sb" class="nav-item" onclick="syncDataFromCloud()" title="Sincronizar" aria-label="Sincronizar"><i aria-hidden="true" class="fa-solid fa-arrows-rotate"></i><span class="sidebar-label">Sincronizar</span></button>
+                <button class="nav-item" onclick="openSettings()" title="Configurações" aria-label="Configurações"><i aria-hidden="true" class="fa-solid fa-gear"></i><span class="sidebar-label">Configurações</span></button>
+            </div>
+        </aside>
+
+        <div class="content">
+            <header id="main-header" class="topbar">
+                <div class="topbar-row">
+                    <h1 class="page-title">Nossas <span class="hl">Finanças</span></h1>
+                    <div class="mobile-actions">
+                        <button class="icon-btn" onclick="toggleDarkMode()" title="Alternar tema" aria-label="Alternar tema"><i aria-hidden="true" id="theme-icon-mb" class="fa-solid fa-sun"></i></button>
+                        <button id="btn-sync-mb" class="icon-btn" onclick="syncDataFromCloud()" title="Sincronizar" aria-label="Sincronizar"><i aria-hidden="true" class="fa-solid fa-arrows-rotate"></i></button>
+                        <button class="icon-btn" onclick="openSettings()" title="Configurações" aria-label="Configurações"><i aria-hidden="true" class="fa-solid fa-gear"></i></button>
+                    </div>
+                </div>
+                <div class="topbar-controls">
+                    <div class="month">
+                        <button onclick="changeMonth(-1)" aria-label="Mês anterior"><i aria-hidden="true" class="fa-solid fa-chevron-left"></i></button>
+                        <span aria-live="polite" id="current-month-display">Mês/Ano</span>
+                        <button onclick="changeMonth(1)" aria-label="Próximo mês"><i aria-hidden="true" class="fa-solid fa-chevron-right"></i></button>
+                    </div>
+                    <select id="view-user-filter" class="select select-neon" aria-label="Visão por pessoa" onchange="renderData()">
+                        <option value="all">Visão Geral</option>
+                        <option value="user1">Pessoa A</option>
+                        <option value="user2">Pessoa B</option>
+                    </select>
+                </div>
+            </header>
+
+            <main id="main-content" tabindex="-1" class="main">
+
+                <!-- ===== DASHBOARD ===== -->
+                <section id="view-dashboard" class="view-section active">
+                    <div id="dash-budget-alert" role="alert" class="notice notice-magenta hidden">
+                        <div class="notice-main">
+                            <span class="ico ico-paper"><i aria-hidden="true" class="fa-solid fa-triangle-exclamation"></i></span>
+                            <div><strong>Atenção: teto de categoria excedido!</strong><p id="dash-budget-alert-msg"></p></div>
+                        </div>
+                        <button class="btn btn-sm btn-paper" onclick="switchView('categories')">Ver</button>
+                    </div>
+                    <div class="reminders">
+                        <div id="card-due-reminder" class="notice notice-yellow hidden">
+                            <div class="notice-main">
+                                <span class="ico ico-paper"><i aria-hidden="true" class="fa-solid fa-credit-card"></i></span>
+                                <div><strong>Próximo vencimento de cartão</strong><p id="card-due-reminder-text"></p></div>
+                            </div>
+                            <span id="card-due-badge" class="chip"></span>
+                        </div>
+                        <div id="fixed-bills-reminder" class="notice notice-cyan hidden">
+                            <div class="notice-main">
+                                <span class="ico ico-paper"><i aria-hidden="true" class="fa-solid fa-bell"></i></span>
+                                <div><strong>Lembrete de contas fixas</strong><p id="fixed-bills-reminder-text"></p></div>
+                            </div>
+                            <button class="btn btn-sm btn-paper" onclick="switchView('transactions')">Ver</button>
+                        </div>
+                    </div>
+
+                    <h2 class="section-title" style="margin-top:6px">Resumo do mês</h2>
+                    <div class="grid-2">
+                        <!-- Painel 1 (alterna ao clicar) -->
+                        <div class="folder tab-yellow nb panel panel-cyan" onclick="toggleAvailableView()" onkeydown="panelKey(event, this)" role="button" tabindex="0" title="Clique para alternar a visualização">
+                            <div id="view-total-avail" class="view-available active">
+                                <p class="panel-label"><span class="lbl"><span class="ico ico-paper"><i aria-hidden="true" class="fa-solid fa-wallet"></i></span> (=) Total disponível</span><i aria-hidden="true" class="fa-solid fa-arrows-rotate hint"></i></p>
+                                <p id="dash-total-available" class="big">R$ 0,00</p>
+                                <div class="chip-row">
+                                    <span class="chip">Saldo ant. <b id="dash-mini-prev">R$ 0,00</b></span>
+                                    <span class="chip">+ Receitas <b id="dash-mini-inc">R$ 0,00</b></span>
+                                    <span class="chip">− Debitadas <b id="dash-mini-exp">R$ 0,00</b></span>
+                                </div>
+                            </div>
+                            <div id="view-prev-bal" class="view-available">
+                                <p class="panel-label"><span class="lbl"><span class="ico ico-paper"><i aria-hidden="true" class="fa-solid fa-clock-rotate-left"></i></span> Saldo anterior</span><i aria-hidden="true" class="fa-solid fa-arrows-rotate hint"></i></p>
+                                <p id="dash-prev-balance" class="big">R$ 0,00</p>
+                                <p class="help" style="color:inherit;opacity:.75">Acumulado dos meses passados</p>
+                            </div>
+                            <div id="view-income" class="view-available">
+                                <p class="panel-label"><span class="lbl"><span class="ico ico-paper"><i aria-hidden="true" class="fa-solid fa-arrow-trend-up"></i></span> (+) Receitas</span><i aria-hidden="true" class="fa-solid fa-arrows-rotate hint"></i></p>
+                                <p id="dash-income" class="big">R$ 0,00</p>
+                                <p class="help" style="color:inherit;opacity:.75">Entradas do mês</p>
+                            </div>
+                        </div>
+
+                        <!-- Painel 2 (alterna ao clicar) -->
+                        <div class="folder tab-magenta nb panel" onclick="toggleExpenseView()" onkeydown="panelKey(event, this)" role="button" tabindex="0" title="Clique para alternar a visualização das despesas">
+                            <div id="view-exp-debited" class="view-available active">
+                                <p class="panel-label"><span class="lbl"><span class="ico ico-magenta"><i aria-hidden="true" class="fa-solid fa-receipt"></i></span> (−) Despesas debitadas</span><i aria-hidden="true" class="fa-solid fa-arrows-rotate hint"></i></p>
+                                <p id="dash-expense" class="big">R$ 0,00</p>
+                                <p class="help">Já saíram da conta</p>
+                            </div>
+                            <div id="view-exp-pending" class="view-available">
+                                <p class="panel-label"><span class="lbl"><span class="ico ico-yellow"><i aria-hidden="true" class="fa-regular fa-clock"></i></span> A vencer / cartão</span><i aria-hidden="true" class="fa-solid fa-arrows-rotate hint"></i></p>
+                                <p id="dash-pending-expense" class="big">R$ 0,00</p>
+                                <p class="help">Ainda não debitadas</p>
+                            </div>
+                            <div id="view-exp-total" class="view-available">
+                                <p class="panel-label"><span class="lbl"><span class="ico ico-purple"><i aria-hidden="true" class="fa-solid fa-calculator"></i></span> Total de despesas</span><i aria-hidden="true" class="fa-solid fa-arrows-rotate hint"></i></p>
+                                <p id="dash-total-expense" class="big">R$ 0,00</p>
+                                <p class="help">Debitadas + a vencer</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="folder tab-lime nb proj">
+                        <div style="display:flex;align-items:center;gap:12px;min-width:0">
+                            <span class="ico ico-lime ico-lg"><i aria-hidden="true" class="fa-solid fa-scale-balanced"></i></span>
+                            <div><p class="label" style="margin:0">Saldo previsto</p><p class="help">Projeção para o fim do mês</p></div>
+                        </div>
+                        <p id="dash-projected-balance" class="proj-value">R$ 0,00</p>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="folder tab-purple nb chart-card">
+                            <div class="chart-title">
+                                <h3><span class="ico ico-purple"><i aria-hidden="true" class="fa-solid fa-credit-card"></i></span> Cartões de crédito</h3>
+                                <button class="btn btn-sm btn-purple" onclick="openCardsModal()"><i aria-hidden="true" class="fa-solid fa-plus"></i> Cartão</button>
+                            </div>
+                            <div id="cards-summary" class="tiles"></div>
+                            <div id="cards-chart-wrap" class="chart-wrap"><canvas id="chartCreditCard" role="img" aria-label="Gráfico de faturas por cartão"></canvas></div>
+                        </div>
+                        <div class="folder tab-cyan nb chart-card">
+                            <div class="chart-title">
+                                <h3><span class="ico ico-cyan"><i aria-hidden="true" class="fa-solid fa-chart-pie"></i></span> Despesas por categoria</h3>
+                            </div>
+                            <div class="chart-wrap chart-wrap-lg"><canvas id="chartCategories" role="img" aria-label="Gráfico de despesas por categoria"></canvas></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ===== EXTRATO ===== -->
+                <section id="view-transactions" class="view-section">
+                    <div class="view-head">
+                        <div><h2>Extrato</h2><p>Tudo que entrou e saiu no mês</p></div>
+                        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+                            <label class="toggle"><input type="checkbox" id="extrato-group" class="switch" checked onchange="setGroupByDate(this.checked)"> Agrupar por data</label>
+                            <button onclick="clearExtratoFilters()" id="btn-clear-filters" class="btn btn-sm btn-paper hidden"><i aria-hidden="true" class="fa-solid fa-filter-circle-xmark"></i> Limpar filtros</button>
+                        </div>
+                    </div>
+                    <div class="nb filters">
+                        <div class="search"><i aria-hidden="true" class="fa-solid fa-magnifying-glass"></i><input type="text" id="extrato-search" class="input" aria-label="Buscar por descrição" oninput="debouncedRender()" placeholder="Buscar por descrição..."></div>
+                        <div class="grid">
+                            <select id="extrato-type-filter" class="select" aria-label="Filtrar por tipo" onchange="renderData()">
+                                <option value="all">Todos os tipos</option>
+                                <option value="expense">Apenas despesas</option>
+                                <option value="income">Apenas receitas</option>
+                            </select>
+                            <select id="extrato-payment-filter" class="select" aria-label="Filtrar por forma de pagamento" onchange="renderData()">
+                                <option value="all">Todas as formas de pagamento</option>
+                                <option value="pix">Pix</option>
+                                <option value="debito">Débito</option>
+                                <option value="credito_vista">Crédito à vista</option>
+                                <option value="credito_parcelado">Crédito parcelado</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-4">
+                            <div class="field"><label for="extrato-min-val">Valor mínimo (R$)</label><input type="number" id="extrato-min-val" class="input" step="0.01" min="0" oninput="debouncedRender()" placeholder="Ex: 50.00"></div>
+                            <div class="field"><label for="extrato-max-val">Valor máximo (R$)</label><input type="number" id="extrato-max-val" class="input" step="0.01" min="0" oninput="debouncedRender()" placeholder="Ex: 500.00"></div>
+                            <div class="field"><label for="extrato-date-filter">Data exata</label><input type="date" id="extrato-date-filter" class="input" onchange="renderData()"></div>
+                        </div>
+                    </div>
+                    <div id="transactions-list" class="stack"></div>
+                    <div id="empty-transactions" class="empty hidden"><i aria-hidden="true" class="fa-solid fa-receipt"></i><p>Nenhum lançamento encontrado.</p></div>
+                </section>
+
+                <!-- ===== CATEGORIAS ===== -->
+                <section id="view-categories" class="view-section">
+                    <div class="view-head">
+                        <div><h2>Categorias e tetos</h2><p>Defina um teto de gastos por categoria</p></div>
+                        <button class="btn btn-cyan" onclick="openCategoryModal()"><i aria-hidden="true" class="fa-solid fa-plus"></i> Nova categoria</button>
+                    </div>
+                    <div id="categories-list" class="grid-3"></div>
+                </section>
+
+                <!-- ===== METAS ===== -->
+                <section id="view-goals" class="view-section">
+                    <div class="view-head">
+                        <div><h2>Metas</h2><p>Sonhos do casal, um passo de cada vez</p></div>
+                        <button class="btn btn-lime" onclick="openGoalModal()"><i aria-hidden="true" class="fa-solid fa-plus"></i> Nova meta</button>
+                    </div>
+                    <div id="goals-list" class="grid-3"></div>
+                    <div id="empty-goals" class="empty hidden"><i aria-hidden="true" class="fa-solid fa-bullseye"></i><p>Nenhuma meta criada ainda.</p></div>
+                </section>
+            </main>
+        </div>
+
+        <!-- NAVEGAÇÃO MOBILE -->
+        <div class="mobile-nav-wrap">
+            <button class="fab" onclick="openTransactionModal()" aria-label="Novo lançamento" title="Novo lançamento"><i aria-hidden="true" class="fa-solid fa-plus"></i></button>
+            <nav aria-label="Navegação principal" class="mobile-nav">
+                <button class="nav-btn is-active" data-target="dashboard" aria-current="page" onclick="switchView('dashboard')"><span class="nav-ico"><i aria-hidden="true" class="fa-solid fa-chart-pie"></i></span><span>Visão</span></button>
+                <button class="nav-btn" data-target="transactions" onclick="switchView('transactions')"><span class="nav-ico"><i aria-hidden="true" class="fa-solid fa-list-ul"></i></span><span>Extrato</span></button>
+                <span class="nav-gap" aria-hidden="true"></span>
+                <button class="nav-btn" data-target="categories" onclick="switchView('categories')"><span class="nav-ico"><i aria-hidden="true" class="fa-solid fa-tags"></i></span><span>Categ.</span></button>
+                <button class="nav-btn" data-target="goals" onclick="switchView('goals')"><span class="nav-ico"><i aria-hidden="true" class="fa-solid fa-bullseye"></i></span><span>Metas</span></button>
+            </nav>
+        </div>
+
+        <!-- ===== MODAL LANÇAMENTO ===== -->
+        <div id="modal-transaction" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-tx-title">
+            <div class="modal-content">
+                <div class="sheet-head">
+                    <h2 id="modal-tx-title">Novo Lançamento</h2>
+                    <button onclick="closeModal('modal-transaction')" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                </div>
+                <form id="form-transaction" onsubmit="saveTransaction(event)" class="form">
+                    <input type="hidden" id="txId">
+                    <div class="seg" role="group" aria-label="Tipo de lançamento">
+                        <label><input type="radio" name="txType" value="expense" class="sr-only" checked onchange="toggleInstallments()"><span class="seg-item seg-expense">Despesa</span></label>
+                        <label><input type="radio" name="txType" value="income" class="sr-only" onchange="toggleInstallments()"><span class="seg-item seg-income">Receita</span></label>
+                    </div>
+                    <div class="field"><label for="txValue">Valor</label><div class="money"><span>R$</span><input type="number" id="txValue" class="input" step="0.01" min="0.01" required placeholder="0.00"></div></div>
+                    <div class="field"><label for="txDesc">Descrição</label><input type="text" id="txDesc" class="input" required placeholder="Ex: Supermercado, Aluguel..."></div>
+                    <div class="row2">
+                        <div class="field"><label for="txDate">Data</label><input type="date" id="txDate" class="input" required></div>
+                        <div class="field"><label for="txCategory">Categoria</label><select id="txCategory" class="select" required></select></div>
+                    </div>
+                    <div class="row2">
+                        <div class="field"><label for="txUser">Responsável</label>
+                            <select id="txUser" class="select" required onchange="suggestCardForUser()">
+                                <option value="user1" id="opt-user1">Pessoa A</option>
+                                <option value="user2" id="opt-user2">Pessoa B</option>
+                                <option value="both">Ambos</option>
+                            </select></div>
+                        <div class="field"><label for="txPayment">Pagamento</label>
+                            <select id="txPayment" class="select" onchange="toggleInstallments()" required>
+                                <option value="pix">Pix</option>
+                                <option value="debito">Débito</option>
+                                <option value="credito_vista">Crédito à vista</option>
+                                <option value="credito_parcelado">Crédito parcelado</option>
+                            </select></div>
+                    </div>
+                    <div id="card-container" class="field hidden">
+                        <div style="display:flex;justify-content:space-between;align-items:center"><label for="txCard" style="margin-bottom:7px">Cartão</label><button type="button" class="link-btn" onclick="openCardsModal()">Gerenciar cartões</button></div>
+                        <select id="txCard" class="select"></select>
+                    </div>
+                    <div id="installments-container" class="field hidden"><label for="txInstallments">Qtd. parcelas</label><input type="number" id="txInstallments" class="input" min="2" max="48" value="2"></div>
+                    <div id="fixed-container" class="check-row">
+                        <input type="checkbox" id="txFixed" class="switch">
+                        <div><label for="txFixed">Despesa fixa recorrente</label><span class="help">Será debitada do saldo somente na data do pagamento</span></div>
+                    </div>
+                    <button type="submit" class="btn btn-cyan btn-block">Salvar lançamento</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ===== MODAL CATEGORIA ===== -->
+        <div id="modal-category" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-cat-title">
+            <div class="modal-content">
+                <div class="sheet-head">
+                    <h2 id="modal-cat-title">Nova Categoria</h2>
+                    <button onclick="closeModal('modal-category')" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                </div>
+                <form id="form-category" onsubmit="saveCategory(event)" class="form">
+                    <input type="hidden" id="catId">
+                    <div class="field"><label for="catName">Nome da categoria</label><input type="text" id="catName" class="input" required placeholder="Ex: Lazer, Saúde..."></div>
+                    <div class="field"><label for="catBudget">Teto mensal (0 = sem teto)</label><div class="money"><span>R$</span><input type="number" id="catBudget" class="input" step="0.01" min="0" required placeholder="0.00"></div></div>
+                    <button type="submit" class="btn btn-cyan btn-block">Salvar categoria</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ===== MODAL META ===== -->
+        <div id="modal-goal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-goal-title">
+            <div class="modal-content">
+                <div class="sheet-head">
+                    <h2 id="modal-goal-title">Nova Meta</h2>
+                    <button onclick="closeModal('modal-goal')" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                </div>
+                <form id="form-goal" onsubmit="saveGoal(event)" class="form">
+                    <input type="hidden" id="goalId">
+                    <div class="field"><label for="goalName">Nome da meta</label><input type="text" id="goalName" class="input" required placeholder="Ex: Viagem de férias"></div>
+                    <div class="row2">
+                        <div class="field"><label for="goalTarget">Valor alvo</label><input type="number" id="goalTarget" class="input" step="0.01" min="1" required></div>
+                        <div class="field"><label for="goalCurrent">Já guardado</label><input type="number" id="goalCurrent" class="input" step="0.01" min="0" value="0"></div>
+                    </div>
+                    <div class="field"><label for="goalDeadline">Prazo (opcional)</label><input type="month" id="goalDeadline" class="input"></div>
+                    <button type="submit" class="btn btn-lime btn-block">Salvar meta</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ===== MODAL CONFIGURAÇÕES ===== -->
+        <div id="modal-settings" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-settings-title">
+            <div class="modal-content">
+                <div class="sheet-head">
+                    <h2 id="modal-settings-title">Configurações</h2>
+                    <button onclick="closeModal('modal-settings')" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="form">
+                    <div class="field"><label for="set-script-url">Planilha do Google (URL Apps Script)</label><input type="text" id="set-script-url" class="input" placeholder="https://script.google.com/..."></div>
+                    <div class="field"><label for="set-script-token">Senha de sincronização (opcional)</label><input type="password" id="set-script-token" class="input" autocomplete="off" placeholder="Igual à propriedade TOKEN do Apps Script"></div>
+                    <div class="row2">
+                        <div class="field"><label for="set-user1">Nome pessoa A</label><input type="text" id="set-user1" class="input"></div>
+                        <div class="field"><label for="set-user2">Nome pessoa B</label><input type="text" id="set-user2" class="input"></div>
+                    </div>
+                    <button type="button" onclick="closeModal('modal-settings'); openCardsModal()" class="link-row">
+                        <span><strong><i aria-hidden="true" class="fa-solid fa-credit-card"></i> Cartões de crédito</strong><span class="help">Adicionar, editar e definir o dia de vencimento</span></span>
+                        <i aria-hidden="true" class="fa-solid fa-chevron-right"></i>
+                    </button>
+                    <div class="check-row">
+                        <input type="checkbox" id="set-enable-rollover" class="switch" checked>
+                        <div><label for="set-enable-rollover">Transferir saldo anterior</label><span class="help">Acumula positivo/negativo entre os meses passados</span></div>
+                    </div>
+                    <button onclick="saveSettings()" class="btn btn-block">Salvar configurações</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== MODAL CARTÕES (lista) ===== -->
+        <div id="modal-cards" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-cards-title">
+            <div class="modal-content">
+                <div class="sheet-head">
+                    <h2 id="modal-cards-title">Cartões de Crédito</h2>
+                    <button onclick="closeModal('modal-cards')" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="cards-manage-list" class="stack" style="margin-bottom:16px"></div>
+                <button onclick="openCardModal()" class="btn btn-purple btn-block"><i aria-hidden="true" class="fa-solid fa-plus"></i> Novo cartão</button>
+            </div>
+        </div>
+
+        <!-- ===== MODAL CARTÃO (cadastro) ===== -->
+        <div id="modal-card" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-card-title">
+            <div class="modal-content">
+                <div class="sheet-head">
+                    <h2 id="modal-card-title">Novo Cartão</h2>
+                    <button onclick="closeModal('modal-card')" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                </div>
+                <form id="form-card" onsubmit="saveCard(event)" class="form">
+                    <input type="hidden" id="cardId">
+                    <div class="field"><label for="cardName">Nome do cartão</label><input type="text" id="cardName" class="input" required maxlength="40" placeholder="Ex: Nubank, Itaú Platinum..."></div>
+                    <div class="row2">
+                        <div class="field"><label for="cardOwner">Titular</label>
+                            <select id="cardOwner" class="select">
+                                <option value="user1" id="opt-card-owner1">Pessoa A</option>
+                                <option value="user2" id="opt-card-owner2">Pessoa B</option>
+                                <option value="both">Ambos</option>
+                            </select></div>
+                        <div class="field"><label for="cardDue">Dia do vencimento</label><input type="number" id="cardDue" class="input" min="1" max="31" required></div>
+                    </div>
+                    <fieldset><legend>Cor</legend><div id="card-colors" class="swatches"></div></fieldset>
+                    <button type="submit" class="btn btn-purple btn-block">Salvar cartão</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let appData = {
+            transactions: [],
+            categories: [
+                { id: 'c1', name: 'Moradia', budget: 1500 },
+                { id: 'c2', name: 'Mercado', budget: 800 },
+                { id: 'c3', name: 'Lazer', budget: 300 }
+            ],
+            goals: [],
+            cards: [],
+            settings: { 
+                user1Name: 'Pessoa A', user2Name: 'Pessoa B', 
+                googleScriptUrl: '',
+                user1CardDueDate: 10, user2CardDueDate: 15,
+                enableRollover: true, darkMode: true
+            }
+        };
+
+        // Dia 1 evita o bug de setMonth() pular fevereiro quando hoje é dia 29-31
+        let currentViewDate = (() => { const d = new Date(); d.setDate(1); return d; })();
+        let charts = {};
+        let isSidebarCollapsed = false;
+        let currentAvailableViewIndex = 0;
+        let currentExpenseViewIndex = 0;
+        let groupByDate = true;
+        let renderTimer = null;
+
+        // ---------- Utilitários ----------
+        // Configurações que ficam só neste aparelho (nunca vão para a planilha)
+        const LOCAL_ONLY_SETTINGS = ['googleScriptUrl', 'googleScriptToken', 'darkMode'];
+        const nowTs = () => Date.now();
+        const alive = arr => (arr || []).filter(x => !x.deleted);
+        // Escapa HTML (evita XSS: os dados vêm de uma planilha compartilhada)
+        const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+        // Ids só podem ter letras, números, _ e - (seguro para usar dentro de onclick)
+        const sid = id => String(id ?? '').replace(/[^A-Za-z0-9_\-]/g, '');
+        // Na visão de uma pessoa, lançamentos "Ambos" contam metade
+        function shareValue(t) {
+            const vu = document.getElementById('view-user-filter')?.value || 'all';
+            return (vu !== 'all' && t.userId === 'both') ? t.value / 2 : t.value;
+        }
+        // Dias até a próxima ocorrência de um dia do mês (atravessa virada de mês)
+        function daysUntilDay(day) {
+            const now = new Date(); now.setHours(0, 0, 0, 0);
+            const dim = (y, m) => new Date(y, m + 1, 0).getDate();
+            let target = new Date(now.getFullYear(), now.getMonth(), Math.min(day, dim(now.getFullYear(), now.getMonth())));
+            if (target < now) {
+                const nm = now.getMonth() + 1;
+                target = new Date(now.getFullYear(), nm, Math.min(day, dim(now.getFullYear(), nm)));
+            }
+            return Math.round((target - now) / 86400000);
+        }
+
+        function toggleAvailableView() {
+            const views = ['view-total-avail', 'view-prev-bal', 'view-income'];
+            document.getElementById(views[currentAvailableViewIndex]).classList.remove('active');
+            currentAvailableViewIndex = (currentAvailableViewIndex + 1) % views.length;
+            document.getElementById(views[currentAvailableViewIndex]).classList.add('active');
+        }
+
+        function toggleExpenseView() {
+            const views = ['view-exp-debited', 'view-exp-pending', 'view-exp-total'];
+            document.getElementById(views[currentExpenseViewIndex]).classList.remove('active');
+            currentExpenseViewIndex = (currentExpenseViewIndex + 1) % views.length;
+            document.getElementById(views[currentExpenseViewIndex]).classList.add('active');
+        }
+
+        function formatCurrency(val) {
+            return Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function showToast(msg, isError = false) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast' + (isError ? ' toast-error' : '');
+            toast.innerHTML = `<i aria-hidden="true" class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> <span>${msg}</span>`;
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.add('show'));
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        function toggleSidebar() {
+            isSidebarCollapsed = !isSidebarCollapsed;
+            document.getElementById('btn-sidebar-toggle')?.setAttribute('aria-expanded', String(!isSidebarCollapsed));
+            document.getElementById('main-sidebar').classList.toggle('collapsed', isSidebarCollapsed);
+            const icon = document.getElementById('sidebar-toggle-icon');
+            if (icon) {
+                icon.classList.toggle('fa-angles-left', !isSidebarCollapsed);
+                icon.classList.toggle('fa-angles-right', isSidebarCollapsed);
+            }
+        }
+
+        function loadLocalData() {
+            try {
+                let stored = localStorage.getItem('fin_app_data_v2');
+                if (!stored || JSON.parse(stored).transactions.length === 0) {
+                    const oldKeys = ['fin_app_data', 'financas_casal_data', 'appData', 'financas_data'];
+                    for (let key of oldKeys) {
+                        const oldStored = localStorage.getItem(key);
+                        if (oldStored && JSON.parse(oldStored).transactions && JSON.parse(oldStored).transactions.length > 0) {
+                            stored = oldStored;
+                            localStorage.setItem('fin_app_data_v2', stored);
+                            showToast("DADOS ANTERIORES RECUPERADOS COM SUCESSO!");
+                            break;
+                        }
+                    }
+                }
+
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    appData = { ...appData, ...parsed, settings: { ...appData.settings, ...(parsed.settings || {}) } }; 
+                    migrateData();
+                }
+                
+                ensureDefaultCards();
+                ensureFixedTransactionsForMonth();
+                applyTheme();
+            } catch (e) { console.error(e); }
+        }
+
+        function saveLocalData() {
+            try { localStorage.setItem('fin_app_data_v2', JSON.stringify(appData)); } 
+            catch (e) { console.error(e); }
+        }
+
+        function applyTheme() {
+            const isDark = appData.settings.darkMode;
+            if (isDark) {
+                document.documentElement.classList.add('dark');
+                document.getElementById('theme-icon-mb')?.classList.replace('fa-moon', 'fa-sun');
+                document.getElementById('theme-icon-sb')?.classList.replace('fa-moon', 'fa-sun');
+                const themeText = document.getElementById('theme-text-sb');
+                if (themeText) themeText.textContent = "Modo Claro";
+            } else {
+                document.documentElement.classList.remove('dark');
+                document.getElementById('theme-icon-mb')?.classList.replace('fa-sun', 'fa-moon');
+                document.getElementById('theme-icon-sb')?.classList.replace('fa-sun', 'fa-moon');
+                const themeText = document.getElementById('theme-text-sb');
+                if (themeText) themeText.textContent = "Modo Escuro";
+            }
+            document.querySelector('meta[name="theme-color"]')?.setAttribute('content', document.documentElement.classList.contains('dark') ? '#0A0B12' : '#FFD21F');
+            updateChartTheme();
+        }
+
+        function toggleDarkMode() {
+            appData.settings.darkMode = !appData.settings.darkMode;
+            applyTheme();
+            saveLocalData();
+            saveToCloud();
+        }
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn, .sidebar-nav-btn').forEach(btn => {
+                const on = btn.dataset.target === viewId;
+                btn.classList.toggle('is-active', on);
+                if (on) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current');
+            });
+            const targetView = document.getElementById(`view-${viewId}`);
+            if (targetView) targetView.classList.add('active');
+            renderData();
+        }
+
+        function changeMonth(delta) {
+            currentViewDate.setMonth(currentViewDate.getMonth() + delta);
+            updateMonthDisplay();
+            ensureFixedTransactionsForMonth();
+            renderData();
+        }
+
+        function updateMonthDisplay() {
+            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            const el = document.getElementById('current-month-display');
+            if (el) el.textContent = `${months[currentViewDate.getMonth()]} ${currentViewDate.getFullYear()}`;
+        }
+
+        // Garante que todo item tenha updatedAt (necessário para o merge)
+        function migrateData() {
+            ['transactions', 'categories', 'goals', 'cards'].forEach(k => {
+                if (!Array.isArray(appData[k])) appData[k] = [];
+                appData[k].forEach(x => { if (!x.updatedAt) x.updatedAt = 1; });
+            });
+            if (!appData.settings) appData.settings = {};
+            if (appData.settings.updatedAt === undefined) appData.settings.updatedAt = 0;
+        }
+
+        // Gera as despesas fixas de todos os meses, da primeira até o mês atual (ou o mês visto, até +12).
+        // Ids determinísticos: dois aparelhos geram o MESMO id e o merge nunca duplica.
+        function ensureFixedTransactionsForMonth() {
+            if (!appData.transactions || appData.transactions.length === 0) return;
+
+            const now = new Date();
+            const cur = new Date(now.getFullYear(), now.getMonth(), 1);
+            const view = new Date(currentViewDate.getFullYear(), currentViewDate.getMonth(), 1);
+            let last = view > cur ? view : cur;
+            const cap = new Date(cur.getFullYear(), cur.getMonth() + 12, 1);
+            if (last > cap) last = cap;
+
+            let created = false;
+
+            // Encerra recorrências: lançamentos futuros de uma fixa original já excluída
+            // (ex.: gerados por outro aparelho antes de sincronizar a exclusão)
+            const curKey = monthKey(cur);
+            const deletedMasters = new Set(appData.transactions.filter(t => t.isFixed && !t.parentFixedId && t.deleted).map(t => t.id));
+            appData.transactions.forEach(t => {
+                if (t.parentFixedId && !t.deleted && deletedMasters.has(t.parentFixedId) && String(t.date).slice(0, 7) > curKey) {
+                    t.deleted = true; t.updatedAt = nowTs(); created = true;
+                }
+            });
+
+            const masters = appData.transactions.filter(t => t.isFixed && !t.parentFixedId && !t.deleted && t.date);
+
+            masters.forEach(master => {
+                const [mY, mM, mD] = master.date.split('-').map(Number);
+                // Meses já existentes (inclui os excluídos, para não "ressuscitar" uma fixa apagada)
+                const have = new Set(
+                    appData.transactions
+                        .filter(t => t.parentFixedId === master.id && t.date)
+                        .map(t => t.date.slice(0, 7))
+                );
+                have.add(master.date.slice(0, 7));
+
+                let y = mY, m = mM - 1;
+                while (new Date(y, m, 1) <= last) {
+                    const mm = String(m + 1).padStart(2, '0');
+                    const key = `${y}-${mm}`;
+                    if (!have.has(key)) {
+                        const dim = new Date(y, m + 1, 0).getDate();
+                        const day = String(Math.min(mD, dim)).padStart(2, '0');
+                        // não herda "paid" nem "installmentInfo" da original
+                        const { paid, installmentInfo, ...base } = master;
+                        appData.transactions.push({
+                            ...base,
+                            id: `fx_${master.id}_${y}${mm}`,
+                            parentFixedId: master.id,
+                            date: `${key}-${day}`,
+                            isFixed: true,
+                            updatedAt: nowTs()
+                        });
+                        have.add(key);
+                        created = true;
+                    }
+                    m++; if (m > 11) { m = 0; y++; }
+                }
+            });
+
+            if (created) saveLocalData();
+        }
+
+        // ================= SINCRONIZAÇÃO (merge item a item) =================
+        let syncing = false, syncAgain = false, syncTimer = null;
+
+        // Para cada id vence o de maior updatedAt. Empate: mantém o primeiro (local).
+        function mergeById(a, b) {
+            const map = new Map();
+            [...(a || []), ...(b || [])].forEach(item => {
+                if (!item || !item.id) return;
+                const cur = map.get(item.id);
+                if (!cur || (item.updatedAt || 0) > (cur.updatedAt || 0)) map.set(item.id, item);
+            });
+            return [...map.values()];
+        }
+
+        function sharedSettings() {
+            const s = { ...appData.settings };
+            LOCAL_ONLY_SETTINGS.forEach(k => delete s[k]);
+            return s;
+        }
+
+        function mergeCloudIntoLocal(cloud) {
+            if (!cloud) return;
+            appData.transactions = mergeById(appData.transactions, cloud.transactions);
+            appData.categories = mergeById(appData.categories, cloud.categories);
+            appData.goals = mergeById(appData.goals, cloud.goals);
+            appData.cards = mergeById(appData.cards, cloud.cards);
+            const cs = { ...(cloud.settings || {}) };
+            LOCAL_ONLY_SETTINGS.forEach(k => delete cs[k]);
+            if ((cs.updatedAt || 0) > (appData.settings.updatedAt || 0)) {
+                appData.settings = { ...appData.settings, ...cs };
+            }
+        }
+
+        function setSyncSpinner(on) {
+            ['btn-sync-mb', 'btn-sync-sb'].forEach(id => {
+                const icon = document.getElementById(id)?.querySelector('i');
+                if (icon) { icon.classList.toggle('animate-spin', on); }
+            });
+        }
+
+        function setSyncStatus(ok) {
+            ['btn-sync-mb', 'btn-sync-sb'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.style.color = ok ? '' : '#ef4444';
+                el.title = ok ? 'Sincronizado' : 'Falha ao sincronizar — toque para tentar de novo';
+                el.setAttribute('aria-label', el.title);
+            });
+        }
+
+        async function syncDataFromCloud(opts = {}) {
+            const silent = !!opts.silent;
+            const url = appData.settings.googleScriptUrl;
+            if (!url) { if (!silent) showToast("Configure a URL da planilha primeiro.", true); return; }
+            if (syncing) { syncAgain = true; return; }
+            syncing = true;
+            setSyncSpinner(true);
+
+            try {
+                ensureFixedTransactionsForMonth();
+                const payload = {
+                    token: appData.settings.googleScriptToken || '',
+                    data: {
+                        transactions: appData.transactions,
+                        categories: appData.categories,
+                        goals: appData.goals,
+                        cards: appData.cards,
+                        settings: sharedSettings()
+                    }
+                };
+                // text/plain evita o preflight de CORS e permite LER a resposta do Apps Script
+                const res = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const out = await res.json();
+                if (out.status !== 'success') throw new Error(out.message || 'Resposta inválida do servidor');
+
+                mergeCloudIntoLocal(out.data);
+                ensureFixedTransactionsForMonth();
+                saveLocalData(); applySettings(); renderData();
+                setSyncStatus(true);
+                if (!silent) showToast("Sincronizado!");
+            } catch (e) {
+                console.error("Erro sync:", e);
+                setSyncStatus(false);
+                if (!silent) showToast("Sem conexão com a nuvem. Seus dados estão salvos neste aparelho.", true);
+            } finally {
+                syncing = false;
+                setSyncSpinner(false);
+                if (syncAgain) { syncAgain = false; scheduleSync(300); }
+            }
+        }
+
+        function scheduleSync(delay = 800) {
+            if (!appData.settings.googleScriptUrl) return;
+            clearTimeout(syncTimer);
+            syncTimer = setTimeout(() => syncDataFromCloud({ silent: true }), delay);
+        }
+
+        // Mantém o nome antigo: salva no aparelho e agenda o envio (com debounce)
+        function saveToCloud() {
+            saveLocalData();
+            scheduleSync();
+        }
+
+        // ---------- Modais acessíveis: foco, Esc e Tab preso dentro do modal ----------
+        const modalFocusStack = [];
+        function openModal(id) {
+            const m = document.getElementById(id);
+            if (!m) return;
+            modalFocusStack.push({ id, el: document.activeElement });
+            m.classList.add('active');
+            const box = m.querySelector('.modal-content');
+            if (box) { box.setAttribute('tabindex', '-1'); box.focus({ preventScroll: true }); }
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (!m) return;
+            m.classList.remove('active');
+            const i = modalFocusStack.map(x => x.id).lastIndexOf(id);
+            if (i >= 0) {
+                const { el } = modalFocusStack.splice(i, 1)[0];
+                if (el && el.focus && document.contains(el)) el.focus({ preventScroll: true });
+            }
+        }
+        document.addEventListener('keydown', e => {
+            const open = [...document.querySelectorAll('.modal.active')].pop();
+            if (!open) return;
+            if (e.key === 'Escape') { closeModal(open.id); return; }
+            if (e.key !== 'Tab') return;
+            const f = [...open.querySelectorAll('button, [href], input:not([type="hidden"]), select, textarea, [tabindex]:not([tabindex="-1"])')]
+                .filter(el => !el.disabled && el.offsetParent !== null);
+            if (!f.length) return;
+            const first = f[0], last = f[f.length - 1], cur = document.activeElement;
+            if (!open.contains(cur) || cur.classList.contains('modal-content')) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
+            else if (e.shiftKey && cur === first) { e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && cur === last) { e.preventDefault(); first.focus(); }
+        });
+
+        // Painéis clicáveis também respondem a Enter/Espaço
+        function panelKey(e, el) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+        }
+        function debouncedRender() { clearTimeout(renderTimer); renderTimer = setTimeout(renderData, 200); }
+        const monthKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+
+        function setGroupByDate(on) {
+            groupByDate = !!on;
+            try { localStorage.setItem('fin_group_by_date', groupByDate ? '1' : '0'); } catch (e) {}
+            renderData();
+        }
+
+        // ================= CARTÕES DE CRÉDITO =================
+        const CARD_COLORS = [
+            { hex: '#00F3FF', name: 'Ciano' }, { hex: '#BD00FF', name: 'Roxo' }, { hex: '#FF00FF', name: 'Magenta' },
+            { hex: '#CCFF00', name: 'Lima' }, { hex: '#3b82f6', name: 'Azul' }, { hex: '#f59e0b', name: 'Âmbar' }
+        ];
+        const safeColor = c => /^#[0-9a-fA-F]{6}$/.test(c || '') ? c : '#00F3FF';
+        const isCreditPayment = p => p === 'credito_vista' || p === 'credito_parcelado';
+        const aliveCards = () => alive(appData.cards);
+        function ownerLabel(o) {
+            return o === 'user1' ? (appData.settings.user1Name || 'Pessoa A') : o === 'user2' ? (appData.settings.user2Name || 'Pessoa B') : 'Ambos';
+        }
+
+        // Primeiro uso após a atualização: cria um cartão por pessoa a partir dos vencimentos antigos.
+        // Ids fixos: dois aparelhos criam o MESMO cartão e o merge nunca duplica (updatedAt 1 = qualquer edição vence).
+        function ensureDefaultCards() {
+            if (!Array.isArray(appData.cards)) appData.cards = [];
+            if (appData.cards.length) return;
+            const s = appData.settings;
+            appData.cards.push(
+                { id: 'card_u1', name: `Cartão ${s.user1Name || 'Pessoa A'}`, owner: 'user1', dueDay: s.user1CardDueDate || 10, color: '#00F3FF', updatedAt: 1 },
+                { id: 'card_u2', name: `Cartão ${s.user2Name || 'Pessoa B'}`, owner: 'user2', dueDay: s.user2CardDueDate || 15, color: '#BD00FF', updatedAt: 1 }
+            );
+        }
+
+        // Cartão de um lançamento: o escolhido; se não houver (lançamentos antigos), o cartão padrão do responsável
+        function getCardForTx(t) {
+            if (!isCreditPayment(t.payment)) return null;
+            const cards = aliveCards();
+            const chosen = t.cardId && cards.find(c => c.id === t.cardId);
+            if (chosen) return chosen;
+            const fallbackId = t.userId === 'user2' ? 'card_u2' : 'card_u1';
+            return cards.find(c => c.id === fallbackId) || cards[0] || null;
+        }
+        function cardDueDay(t) { const c = getCardForTx(t); return (c && Number(c.dueDay)) || 10; }
+
+        function openCardsModal() { renderCardsManageList(); openModal('modal-cards'); }
+
+        function renderCardsManageList() {
+            const list = document.getElementById('cards-manage-list');
+            const cards = aliveCards();
+            if (!cards.length) {
+                list.innerHTML = '<p class="help" style="text-align:center;padding:24px 0">Nenhum cartão cadastrado ainda.</p>';
+                return;
+            }
+            list.innerHTML = cards.map(c => `
+                <div class="manage-row">
+                    <div class="manage-main">
+                        <span class="manage-bar" style="background:${safeColor(c.color)}"></span>
+                        <div style="min-width:0">
+                            <p class="manage-name">${esc(c.name)}</p>
+                            <p class="help">${esc(ownerLabel(c.owner))} • Vence dia ${Number(c.dueDay) || 10}</p>
+                        </div>
+                    </div>
+                    <div class="item-actions">
+                        <button onclick="openCardModal('${sid(c.id)}')" title="Editar" aria-label="Editar cartão ${esc(c.name)}" class="icon-btn icon-btn-sm icon-btn-flat"><i aria-hidden="true" class="fa-solid fa-pen"></i></button>
+                        <button onclick="deleteCard('${sid(c.id)}')" title="Apagar" aria-label="Apagar cartão ${esc(c.name)}" class="icon-btn icon-btn-sm icon-btn-flat hover-magenta"><i aria-hidden="true" class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                </div>`).join('');
+        }
+
+        function openCardModal(id = null) {
+            document.getElementById('form-card').reset();
+            const card = id ? appData.cards.find(c => c.id === id) : null;
+            document.getElementById('cardId').value = card ? card.id : '';
+            document.getElementById('modal-card-title').textContent = card ? 'Editar Cartão' : 'Novo Cartão';
+            document.getElementById('cardName').value = card ? card.name : '';
+            document.getElementById('cardOwner').value = card ? card.owner : 'user1';
+            document.getElementById('cardDue').value = card ? (card.dueDay || 10) : 10;
+            const current = card ? safeColor(card.color) : CARD_COLORS[aliveCards().length % CARD_COLORS.length].hex;
+            document.getElementById('card-colors').innerHTML = CARD_COLORS.map(c => `
+                <label class="swatch">
+                    <input type="radio" name="cardColor" value="${c.hex}" class="sr-only" ${c.hex.toLowerCase() === current.toLowerCase() ? 'checked' : ''}>
+                    <span class="swatch-dot" style="background:${c.hex}"></span>
+                    <span class="sr-only">${c.name}</span>
+                </label>`).join('');
+            openModal('modal-card');
+        }
+
+        function saveCard(e) {
+            e.preventDefault();
+            const name = document.getElementById('cardName').value.trim();
+            if (!name) { showToast('Informe o nome do cartão.', true); return; }
+            const data = {
+                name,
+                owner: document.getElementById('cardOwner').value,
+                dueDay: Math.min(31, Math.max(1, parseInt(document.getElementById('cardDue').value) || 10)),
+                color: document.querySelector('input[name="cardColor"]:checked')?.value || '#00F3FF'
+            };
+            const id = document.getElementById('cardId').value;
+            if (id) {
+                const idx = appData.cards.findIndex(c => c.id === id);
+                if (idx !== -1) appData.cards[idx] = { ...appData.cards[idx], ...data, updatedAt: nowTs() };
+            } else {
+                appData.cards.push({ id: 'card_' + generateId(), ...data, updatedAt: nowTs() });
+            }
+            saveToCloud();
+            populateCardSelect();
+            renderCardsManageList();
+            renderData();
+            closeModal('modal-card');
+            showToast('Cartão salvo!');
+        }
+
+        function deleteCard(id) {
+            if (alive(appData.transactions).some(t => { const c = getCardForTx(t); return c && c.id === id; })) {
+                alert('Não é possível apagar um cartão que possui lançamentos vinculados.');
+                return;
+            }
+            if (confirm('Deseja realmente apagar este cartão?')) {
+                const c = appData.cards.find(x => x.id === id);
+                if (c) { c.deleted = true; c.updatedAt = nowTs(); }
+                saveToCloud(); populateCardSelect(); renderCardsManageList(); renderData(); showToast('Cartão removido.');
+            }
+        }
+
+        function populateCardSelect(selected) {
+            const sel = document.getElementById('txCard');
+            if (!sel) return;
+            const keep = selected !== undefined ? selected : sel.value;
+            const cards = aliveCards();
+            sel.innerHTML = cards.length
+                ? cards.map(c => `<option value="${esc(c.id)}">${esc(c.name)} (${esc(ownerLabel(c.owner))})</option>`).join('')
+                : '<option value="">Nenhum cartão cadastrado</option>';
+            if (keep && cards.some(c => c.id === keep)) sel.value = keep;
+        }
+
+        // Ao trocar o responsável, sugere o cartão dele (se o atual não for dele nem compartilhado)
+        function suggestCardForUser() {
+            const user = document.getElementById('txUser').value;
+            const sel = document.getElementById('txCard');
+            const cards = aliveCards();
+            const cur = cards.find(c => c.id === sel.value);
+            if (user === 'both' || (cur && (cur.owner === user || cur.owner === 'both'))) return;
+            const match = cards.find(c => c.owner === user);
+            if (match) sel.value = match.id;
+        }
+
+        function renderCardsSummary() {
+            const wrap = document.getElementById('cards-summary');
+            const chartWrap = document.getElementById('cards-chart-wrap');
+            const cards = aliveCards();
+            if (!cards.length) {
+                wrap.className = '';
+                wrap.innerHTML = '<p class="help">Nenhum cartão cadastrado. Toque em “+ Cartão” para adicionar.</p>';
+                chartWrap.classList.add('hidden');
+                return [];
+            }
+            const m = currentViewDate.getMonth() + 1, y = currentViewDate.getFullYear();
+            const totals = {};
+            alive(appData.transactions).forEach(t => {
+                if (t.type !== 'expense' || !isCreditPayment(t.payment)) return;
+                const d = getEffectiveDate(t);
+                if (d.getMonth() + 1 !== m || d.getFullYear() !== y) return;
+                const c = getCardForTx(t);
+                if (c) totals[c.id] = (totals[c.id] || 0) + t.value;
+            });
+            wrap.className = 'tiles';
+            chartWrap.classList.remove('hidden');
+            chartWrap.style.height = Math.max(144, cards.length * 34 + 16) + 'px';
+            wrap.innerHTML = cards.map(c => `
+                <div class="tile" style="--c:${safeColor(c.color)}">
+                    <p>${esc(c.name)}</p>
+                    <p class="v">${formatCurrency(totals[c.id] || 0)}</p>
+                    <span class="chip">Venc. dia ${Number(c.dueDay) || 10}</span>
+                </div>`).join('');
+            return cards.map(c => ({ name: c.name, total: totals[c.id] || 0, color: safeColor(c.color) }));
+        }
+
+        function generateId() { return Math.random().toString(36).substr(2, 9); }
+
+        /**
+         * LÓGICA DE DÉBITO DAS DESPESAS:
+         * - Receitas são creditadas imediatamente.
+         * - Despesas em Cartão de Crédito (à vista ou parcelado) NÃO debitam do saldo em conta (Total Disponível).
+         * - Despesas em Pix/Débito são debitadas imediatamente.
+         * - Despesas fixas (isFixed = true) só debitam na data do vencimento.
+         */
+        function isTransactionDebited(t) {
+            if (t.type === 'income') return true;
+
+            // Despesas em cartão de crédito (à vista ou parcelado) não debitam do saldo disponível em conta
+            const isCard = t.payment === 'credito_vista' || t.payment === 'credito_parcelado';
+            if (isCard) {
+                if (t.paid !== undefined && t.paid !== null) return Boolean(t.paid);
+                return false;
+            }
+
+            if (t.paid !== undefined && t.paid !== null) return Boolean(t.paid);
+
+            if (t.isFixed) {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+
+                const parts = t.date.split('-');
+                if (parts.length === 3) {
+                    const txDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    txDate.setHours(0, 0, 0, 0);
+                    return txDate <= today;
+                }
+            }
+            return true;
+        }
+
+        function togglePaidStatus(txId) {
+            const tx = appData.transactions.find(t => t.id === txId);
+            if (tx) {
+                const currentStatus = isTransactionDebited(tx);
+                tx.paid = !currentStatus; tx.updatedAt = nowTs();
+                saveToCloud();
+                renderData();
+                showToast(tx.paid ? "Lançamento marcado como DEBITADO!" : "Lançamento marcado como PENDENTE!");
+            }
+        }
+
+        function openTransactionModal(editId = null) {
+            populateCategorySelect();
+            populateCardSelect('');
+            const form = document.getElementById('form-transaction');
+            form.reset();
+
+            if (editId) {
+                const tx = appData.transactions.find(t => t.id === editId);
+                if (tx) {
+                    document.getElementById('txId').value = tx.id;
+                    document.querySelector(`input[name="txType"][value="${tx.type}"]`).checked = true;
+                    document.getElementById('txValue').value = tx.value;
+                    document.getElementById('txDesc').value = tx.desc;
+                    document.getElementById('txDate').value = tx.date;
+                    document.getElementById('txCategory').value = tx.categoryId;
+                    document.getElementById('txUser').value = tx.userId;
+                    document.getElementById('txPayment').value = tx.payment;
+                    document.getElementById('txFixed').checked = tx.isFixed || false;
+                    const card = getCardForTx(tx);
+                    if (card) document.getElementById('txCard').value = card.id;
+                    document.getElementById('modal-tx-title').textContent = 'Editar Lançamento';
+                }
+            } else {
+                document.getElementById('txId').value = '';
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                document.getElementById('txDate').value = `${yyyy}-${mm}-${dd}`;
+                document.getElementById('modal-tx-title').textContent = 'Novo Lançamento';
+                suggestCardForUser();
+            }
+
+            toggleInstallments();
+            openModal('modal-transaction');
+        }
+
+        function toggleInstallments() {
+            const payment = document.getElementById('txPayment').value;
+            const txType = document.querySelector('input[name="txType"]:checked')?.value;
+            const isCredit = isCreditPayment(payment) && txType === 'expense';
+            const isInstallment = payment === 'credito_parcelado' && txType === 'expense';
+
+            document.getElementById('installments-container').classList.toggle('hidden', !isInstallment);
+            document.getElementById('card-container').classList.toggle('hidden', !isCredit);
+            document.getElementById('fixed-container').classList.toggle('hidden', isInstallment || txType !== 'expense');
+
+            if (isCredit) {
+                const sel = document.getElementById('txCard');
+                const cards = aliveCards();
+                if (!sel.value && cards.length) {
+                    const user = document.getElementById('txUser').value;
+                    sel.value = (cards.find(c => c.owner === user) || cards[0]).id;
+                }
+            }
+        }
+
+        function saveTransaction(e) {
+            e.preventDefault();
+            const type = document.querySelector('input[name="txType"]:checked').value;
+            const payment = document.getElementById('txPayment').value;
+            const isInstallment = payment === 'credito_parcelado' && type === 'expense';
+
+            const baseTx = {
+                type,
+                value: parseFloat(document.getElementById('txValue').value),
+                desc: document.getElementById('txDesc').value.trim(),
+                date: document.getElementById('txDate').value,
+                categoryId: document.getElementById('txCategory').value,
+                userId: document.getElementById('txUser').value,
+                payment,
+                cardId: (type === 'expense' && isCreditPayment(payment)) ? (document.getElementById('txCard').value || undefined) : undefined,
+                // "Fixa" só vale para despesa não parcelada (o checkbox pode ficar marcado escondido)
+                isFixed: type === 'expense' && !isInstallment && document.getElementById('txFixed').checked
+            };
+
+            if (!(baseTx.value > 0)) { showToast("Informe um valor maior que zero.", true); return; }
+
+            const ts = nowTs();
+            const txId = document.getElementById('txId').value;
+
+            if (txId) {
+                const idx = appData.transactions.findIndex(t => t.id === txId);
+                if (idx !== -1) appData.transactions[idx] = { ...appData.transactions[idx], ...baseTx, updatedAt: ts };
+                showToast("Lançamento Atualizado!");
+            } else {
+                if (isInstallment) {
+                    const count = Math.min(48, Math.max(2, parseInt(document.getElementById('txInstallments').value) || 2));
+                    // Divisão em centavos: a última parcela absorve a diferença
+                    const totalCents = Math.round(baseTx.value * 100);
+                    const baseCents = Math.floor(totalCents / count);
+                    const [y, m, d] = baseTx.date.split('-').map(Number);
+                    const groupId = generateId();
+
+                    for (let i = 0; i < count; i++) {
+                        const cents = baseCents + (i === count - 1 ? totalCents - baseCents * count : 0);
+                        // Dia 29-31 em mês curto vira o último dia do mês (sem estourar para o seguinte)
+                        const dim = new Date(y, m - 1 + i + 1, 0).getDate();
+                        const dt = new Date(y, m - 1 + i, Math.min(d, dim));
+                        const strD = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+                        appData.transactions.push({
+                            ...baseTx, id: generateId(), value: cents / 100, date: strD,
+                            installmentInfo: `${i + 1}/${count}`, installmentGroup: groupId, updatedAt: ts
+                        });
+                    }
+                } else {
+                    appData.transactions.push({ ...baseTx, id: generateId(), updatedAt: ts });
+                }
+                showToast("Lançamento Registrado!");
+            }
+
+            ensureFixedTransactionsForMonth();
+            saveToCloud(); renderData(); closeModal('modal-transaction'); 
+        }
+
+        function deleteTransaction(id) {
+            const tx = appData.transactions.find(t => t.id === id);
+            if (!tx) return;
+            const isOriginalFixed = tx.isFixed && !tx.parentFixedId;
+            const isFixedMonth = tx.isFixed && !!tx.parentFixedId;
+
+            let msg = 'Deseja realmente excluir este lançamento?';
+            if (isOriginalFixed) {
+                msg = 'Este é o lançamento ORIGINAL de uma despesa fixa.\n\nExcluí-lo ENCERRA a recorrência: a despesa deixa de ser lançada nos próximos meses e os lançamentos futuros já criados também serão removidos. Os meses até o atual continuam no extrato.\n\nDeseja continuar?';
+            } else if (isFixedMonth) {
+                msg = 'Excluir apenas o lançamento DESTE MÊS?\n\nA despesa fixa continua sendo lançada nos outros meses. (Para encerrar a recorrência, exclua o primeiro lançamento dela.)';
+            }
+            if (!confirm(msg)) return;
+
+            const ts = nowTs();
+            tx.deleted = true; tx.updatedAt = ts;
+            if (isOriginalFixed) {
+                const curKey = monthKey(new Date());
+                appData.transactions.forEach(t => {
+                    if (t.parentFixedId === tx.id && !t.deleted && String(t.date).slice(0, 7) > curKey) { t.deleted = true; t.updatedAt = ts; }
+                });
+            }
+            saveToCloud(); renderData();
+            showToast(isOriginalFixed ? 'Recorrência encerrada.' : 'Lançamento excluído.');
+        }
+
+        function populateCategorySelect() {
+            const select = document.getElementById('txCategory');
+            select.innerHTML = alive(appData.categories).map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join('');
+        }
+
+        function openCategoryModal(id = null) {
+            document.getElementById('form-category').reset();
+            if (id) {
+                const cat = appData.categories.find(c => c.id === id);
+                if (cat) {
+                    document.getElementById('catId').value = cat.id;
+                    document.getElementById('catName').value = cat.name;
+                    document.getElementById('catBudget').value = cat.budget;
+                    document.getElementById('modal-cat-title').textContent = 'Editar Categoria';
+                }
+            } else {
+                document.getElementById('catId').value = '';
+                document.getElementById('modal-cat-title').textContent = 'Nova Categoria';
+            }
+            openModal('modal-category');
+        }
+
+        function saveCategory(e) {
+            e.preventDefault();
+            const id = document.getElementById('catId').value;
+            const catData = {
+                name: document.getElementById('catName').value,
+                budget: parseFloat(document.getElementById('catBudget').value) || 0
+            };
+
+            if (id) {
+                const idx = appData.categories.findIndex(c => c.id === id);
+                if (idx !== -1) appData.categories[idx] = { ...appData.categories[idx], ...catData, updatedAt: nowTs() };
+            } else {
+                appData.categories.push({ id: 'c_' + generateId(), ...catData, updatedAt: nowTs() });
+            }
+            
+            saveToCloud(); renderData(); closeModal('modal-category'); showToast("Categoria salva!");
+        }
+
+        function deleteCategory(id) {
+            if (alive(appData.transactions).some(t => t.categoryId === id)) {
+                alert("Não é possível apagar uma categoria que possui lançamentos vinculados.");
+                return;
+            }
+            if(confirm("Deseja realmente apagar esta categoria?")) {
+                const cat = appData.categories.find(c => c.id === id);
+                if (cat) { cat.deleted = true; cat.updatedAt = nowTs(); }
+                saveToCloud(); renderData(); showToast("Categoria removida.");
+            }
+        }
+
+        function openGoalModal(id = null) {
+            document.getElementById('form-goal').reset();
+            if (id) {
+                const g = appData.goals.find(x => x.id === id);
+                if (g) {
+                    document.getElementById('goalId').value = g.id;
+                    document.getElementById('goalName').value = g.name;
+                    document.getElementById('goalTarget').value = g.target;
+                    document.getElementById('goalCurrent').value = g.current || 0;
+                    document.getElementById('goalDeadline').value = g.deadline || '';
+                    document.getElementById('modal-goal-title').textContent = 'Editar Meta';
+                }
+            } else {
+                document.getElementById('goalId').value = '';
+                document.getElementById('modal-goal-title').textContent = 'Nova Meta';
+            }
+            openModal('modal-goal');
+        }
+
+        function saveGoal(e) {
+            e.preventDefault();
+            const goalData = {
+                name: document.getElementById('goalName').value,
+                target: parseFloat(document.getElementById('goalTarget').value),
+                current: parseFloat(document.getElementById('goalCurrent').value) || 0,
+                deadline: document.getElementById('goalDeadline').value
+            };
+            const id = document.getElementById('goalId').value;
+            if (id) {
+                const idx = appData.goals.findIndex(x => x.id === id);
+                if (idx !== -1) appData.goals[idx] = { ...appData.goals[idx], ...goalData, updatedAt: nowTs() };
+            } else {
+                appData.goals.push({ id: 'g_' + generateId(), ...goalData, updatedAt: nowTs() });
+            }
+            saveToCloud(); renderData(); closeModal('modal-goal'); showToast("Meta salva!");
+        }
+
+        function deleteGoal(id) {
+            if(confirm("Deseja realmente apagar esta meta?")) {
+                const g = appData.goals.find(x => x.id === id);
+                if (g) { g.deleted = true; g.updatedAt = nowTs(); }
+                saveToCloud(); renderData(); showToast("Meta removida.");
+            }
+        }
+
+        function quickAddGoalProgress(id) {
+            const val = prompt("Digite o valor (R$) a ser adicionado a esta meta:");
+            if(val && !isNaN(parseFloat(val.replace(',','.')))) {
+                const num = parseFloat(val.replace(',','.'));
+                const g = appData.goals.find(x => x.id === id);
+                if(g) {
+                    g.current = Math.max(0, (g.current || 0) + num); g.updatedAt = nowTs();
+                    saveToCloud(); renderData(); showToast(`Meta atualizada (${formatCurrency(num)})`);
+                }
+            }
+        }
+
+        function openSettings() {
+            document.getElementById('set-script-url').value = appData.settings.googleScriptUrl || '';
+            document.getElementById('set-script-token').value = appData.settings.googleScriptToken || '';
+            document.getElementById('set-user1').value = appData.settings.user1Name || 'Pessoa A';
+            document.getElementById('set-user2').value = appData.settings.user2Name || 'Pessoa B';
+            document.getElementById('set-enable-rollover').checked = appData.settings.enableRollover;
+            openModal('modal-settings');
+        }
+
+        function saveSettings() {
+            appData.settings.googleScriptUrl = document.getElementById('set-script-url').value.trim();
+            appData.settings.googleScriptToken = document.getElementById('set-script-token').value.trim();
+            appData.settings.updatedAt = nowTs();
+            appData.settings.user1Name = document.getElementById('set-user1').value;
+            appData.settings.user2Name = document.getElementById('set-user2').value;
+            appData.settings.enableRollover = document.getElementById('set-enable-rollover').checked;
+
+            applySettings(); saveToCloud(); renderData(); closeModal('modal-settings'); showToast("Configurações salvas!");
+        }
+
+        function applySettings() {
+            const n1 = appData.settings.user1Name, n2 = appData.settings.user2Name;
+            ['opt-user1', 'opt-card-owner1'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = n1; });
+            ['opt-user2', 'opt-card-owner2'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = n2; });
+            const viewUserFilter = document.getElementById('view-user-filter');
+            viewUserFilter.options[1].text = n1;
+            viewUserFilter.options[2].text = n2;
+        }
+
+        function getEffectiveDate(t) {
+            if (!t.date) return new Date();
+            const parts = t.date.split('-');
+            let y = parseInt(parts[0], 10);
+            let m = parseInt(parts[1], 10) - 1;
+            let d = parseInt(parts[2], 10);
+
+            // Lançamentos no cartão após o dia de vencimento vão para a fatura do mês seguinte
+            if (isCreditPayment(t.payment) && d > cardDueDay(t)) {
+                m += 1;
+            }
+            return new Date(y, m, Math.min(d, 28));
+        }
+
+        function renderData() {
+            const activeView = document.querySelector('.view-section.active')?.id;
+            let totalInc = 0;
+            let totalExpDebited = 0;
+            let totalExpPending = 0;
+            const catTotals = {};
+
+            const allMonthTxs = getAllTransactionsForCurrentMonth();
+            allMonthTxs.forEach(t => {
+                if (t.type === 'income') {
+                    totalInc += shareValue(t);
+                } else {
+                    if (isTransactionDebited(t)) totalExpDebited += shareValue(t);
+                    else totalExpPending += shareValue(t);
+                    catTotals[t.categoryId] = (catTotals[t.categoryId] || 0) + shareValue(t);
+                }
+            });
+
+            const prevBal = calculatePreviousBalance();
+            // Total Disponível já desconta automaticamente todas as despesas debitadas
+            const totalAvailable = prevBal + totalInc - totalExpDebited;
+            const projectedBalance = (prevBal + totalInc) - (totalExpDebited + totalExpPending);
+            const totalExpMonth = totalExpDebited + totalExpPending;
+
+            const setText = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = formatCurrency(v); };
+            setText('dash-income', totalInc);
+            setText('dash-expense', totalExpDebited);
+            setText('dash-pending-expense', totalExpPending);
+            setText('dash-total-expense', totalExpMonth);
+            setText('dash-prev-balance', prevBal);
+            setText('dash-total-available', totalAvailable);
+            setText('dash-mini-prev', prevBal);
+            setText('dash-mini-inc', totalInc);
+            setText('dash-mini-exp', totalExpDebited);
+
+            const projBalEl = document.getElementById('dash-projected-balance');
+            if (projBalEl) {
+                projBalEl.textContent = formatCurrency(projectedBalance);
+                projBalEl.className = `proj-value ${projectedBalance >= 0 ? 'pos' : 'neg'}`;
+            }
+
+            checkBudgetAlerts(catTotals);
+            checkPaymentReminders(allMonthTxs);
+
+            // Só desenha a tela que está visível (a troca de tela chama renderData de novo)
+            if (activeView === 'view-dashboard') {
+                const cardData = renderCardsSummary();
+                updateCharts(catTotals, cardData);
+            }
+            if (activeView === 'view-transactions') renderList(getFilteredTransactions());
+            if (activeView === 'view-categories') renderCategories(catTotals);
+            if (activeView === 'view-goals') renderGoals();
+        }
+
+        function checkBudgetAlerts(catTotals) {
+            const alertBox = document.getElementById('dash-budget-alert');
+            const alertMsg = document.getElementById('dash-budget-alert-msg');
+            
+            let exceededCats = [];
+            alive(appData.categories).forEach(cat => {
+                const spent = catTotals[cat.id] || 0;
+                if (cat.budget > 0 && spent > cat.budget) {
+                    const diff = spent - cat.budget;
+                    exceededCats.push(`${cat.name} (+${formatCurrency(diff)})`);
+                }
+            });
+
+            if (exceededCats.length > 0) {
+                alertBox.classList.remove('hidden');
+                alertMsg.textContent = `Atenção! As seguintes categorias ultrapassaram o teto estipulado: ${exceededCats.join(', ')}`;
+            } else {
+                alertBox.classList.add('hidden');
+            }
+        }
+
+        function checkPaymentReminders(allMonthTxs) {
+            const now = new Date();
+            const currentDay = now.getDate();
+            const isViewingCurrentMonth = (currentViewDate.getMonth() === now.getMonth() && currentViewDate.getFullYear() === now.getFullYear());
+
+            const cardReminderBox = document.getElementById('card-due-reminder');
+            const cardReminderText = document.getElementById('card-due-reminder-text');
+            const cardReminderBadge = document.getElementById('card-due-badge');
+
+            if (isViewingCurrentMonth) {
+                const cardAlerts = [];
+                let closestDays = 99;
+                aliveCards().forEach(c => {
+                    const due = Number(c.dueDay) || 10;
+                    const dd = daysUntilDay(due);
+                    if (dd <= 5) {
+                        cardAlerts.push(`Fatura do ${c.name} vence dia ${due}`);
+                        closestDays = Math.min(closestDays, dd);
+                    }
+                });
+
+                if (cardAlerts.length > 0) {
+                    cardReminderBox.classList.remove('hidden');
+                    cardReminderText.textContent = cardAlerts.join(' • ');
+                    cardReminderBadge.textContent = closestDays === 0 ? "VENCE HOJE!" : `Vence em ${closestDays} dia(s)`;
+                } else {
+                    cardReminderBox.classList.add('hidden');
+                }
+            } else {
+                cardReminderBox.classList.add('hidden');
+            }
+
+            const fixedBillsBox = document.getElementById('fixed-bills-reminder');
+            const fixedBillsText = document.getElementById('fixed-bills-reminder-text');
+
+            if (isViewingCurrentMonth) {
+                const upcomingBills = allMonthTxs.filter(t => {
+                    if (t.type !== 'expense') return false;
+                    const d = Number(t.date.split('-')[2]);
+                    return t.isFixed && !isCreditPayment(t.payment) && !isTransactionDebited(t) && d >= currentDay && (d - currentDay) <= 5;
+                });
+
+                if (upcomingBills.length > 0) {
+                    fixedBillsBox.classList.remove('hidden');
+                    const totalVal = upcomingBills.reduce((acc, t) => acc + t.value, 0);
+                    fixedBillsText.textContent = `${upcomingBills.length} conta(s) fixas a vencer nos próximos 5 dias (Total: ${formatCurrency(totalVal)})`;
+                } else {
+                    fixedBillsBox.classList.add('hidden');
+                }
+            } else {
+                fixedBillsBox.classList.add('hidden');
+            }
+        }
+
+        function getAllTransactionsForCurrentMonth() {
+            const m = currentViewDate.getMonth() + 1; 
+            const y = currentViewDate.getFullYear();
+            const viewUser = document.getElementById('view-user-filter').value;
+            return alive(appData.transactions).filter(t => {
+                let d = getEffectiveDate(t);
+                return (d.getMonth() + 1 === m && d.getFullYear() === y) && 
+                       (viewUser === 'all' || t.userId === viewUser || t.userId === 'both');
+            });
+        }
+
+        function getPaymentLabel(p) {
+            switch(p) {
+                case 'pix': return 'Pix';
+                case 'debito': return 'Débito';
+                case 'credito_vista': return 'Crédito à vista';
+                case 'credito_parcelado': return 'Crédito parcelado';
+                default: return p || '';
+            }
+        }
+
+        function dayHeaderLabel(dateStr) {
+            const [y, m, d] = dateStr.split('-').map(Number);
+            const dt = new Date(y, m - 1, d);
+            const today = new Date(); today.setHours(0, 0, 0, 0);
+            const diff = Math.round((today - dt) / 86400000);
+            const opts = { weekday: 'long', day: 'numeric', month: 'long' };
+            if (y !== today.getFullYear()) opts.year = 'numeric';
+            const base = dt.toLocaleDateString('pt-BR', opts);
+            const cap = base.charAt(0).toUpperCase() + base.slice(1);
+            if (diff === 0) return `Hoje · ${cap}`;
+            if (diff === 1) return `Ontem · ${cap}`;
+            return cap;
+        }
+
+        function renderTxItem(t, grouped) {
+            const cat = appData.categories.find(c => c.id === t.categoryId);
+            const isInc = t.type === 'income';
+            const isDebited = isTransactionDebited(t);
+            const isCard = isCreditPayment(t.payment);
+            const card = isCard ? getCardForTx(t) : null;
+
+            const [y, m, d] = t.date.split('-');
+            const dObj = new Date(y, m - 1, d);
+            const day = String(dObj.getDate()).padStart(2, '0');
+            const monthStr = dObj.toLocaleString('pt-BR', { month: 'short' }).toUpperCase().replace('.', '');
+
+            const fixedBadge = t.isFixed
+                ? `<span class="chip chip-purple" title="${t.parentFixedId ? 'Lançamento mensal de uma despesa fixa' : 'Despesa fixa original: excluir encerra a recorrência'}"><i aria-hidden="true" class="fa-solid fa-arrows-rotate"></i>${t.parentFixedId ? 'Fixa' : 'Fixa · original'}</span>`
+                : '';
+
+            let cardNextMonthBadge = '';
+            if (isCard && parseInt(d, 10) > cardDueDay(t)) {
+                cardNextMonthBadge = `<span class="chip chip-cyan" title="Lançado na fatura do mês seguinte por ser após o vencimento"><i aria-hidden="true" class="fa-solid fa-calendar-plus"></i>Fatura próx. mês</span>`;
+            }
+
+            let debitBadge = '';
+            if (!isInc) {
+                if (isDebited) {
+                    debitBadge = `<button onclick="togglePaidStatus('${sid(t.id)}')" title="Clique para alterar status" class="chip chip-lime" aria-label="Clique para alterar status"><i aria-hidden="true" class="fa-solid fa-circle-check"></i> Debitado</button>`;
+                } else {
+                    const badgeText = isCard ? 'Cartão' : `A vencer (dia ${day})`;
+                    const badgeCls = isCard ? 'chip-purple' : 'chip-yellow';
+                    const badgeIcon = isCard ? 'fa-solid fa-credit-card' : 'fa-regular fa-clock';
+                    debitBadge = `<button onclick="togglePaidStatus('${sid(t.id)}')" title="Clique para alterar status de pagamento" class="chip ${badgeCls}" aria-label="Clique para alterar status de pagamento"><i aria-hidden="true" class="${badgeIcon}"></i> ${badgeText}</button>`;
+                }
+            }
+
+            const infoText = [cat ? esc(cat.name) : 'Outros', esc(getPaymentLabel(t.payment)), card ? esc(card.name) : '', t.installmentInfo ? `(${esc(t.installmentInfo)})` : ''].filter(Boolean).join(' • ');
+
+            const leftBox = grouped
+                ? `<span class="ico ${isInc ? 'ico-lime' : 'ico-magenta'}"><i aria-hidden="true" class="fa-solid ${isInc ? 'fa-arrow-down' : 'fa-arrow-up'}"></i></span>`
+                : `<span class="datebox"><b>${day}</b><span>${monthStr}</span></span>`;
+
+            const amountCls = isInc ? 'pos' : (isDebited ? 'neg' : 'strike');
+
+            return `
+                <div class="tx">
+                    <div class="tx-left">
+                        ${leftBox}
+                        <div class="tx-body">
+                            <div class="tx-head">
+                                <p class="tx-title">${esc(t.desc)}</p>
+                                ${fixedBadge}${cardNextMonthBadge}${debitBadge}
+                            </div>
+                            <span class="tx-meta">${infoText}</span>
+                        </div>
+                    </div>
+                    <div class="tx-right">
+                        <p class="tx-amount ${amountCls}">${isInc ? '+' : '−'} ${formatCurrency(t.value)}</p>
+                        <div class="tx-actions">
+                            <button onclick="openTransactionModal('${sid(t.id)}')" title="Editar" aria-label="Editar lançamento ${esc(t.desc)}" class="icon-btn icon-btn-sm icon-btn-flat"><i aria-hidden="true" class="fa-solid fa-pen"></i></button>
+                            <button onclick="deleteTransaction('${sid(t.id)}')" title="Excluir" aria-label="Excluir lançamento ${esc(t.desc)}" class="icon-btn icon-btn-sm icon-btn-flat hover-magenta"><i aria-hidden="true" class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+        }
+
+        function renderList(txs) {
+            const list = document.getElementById('transactions-list');
+            document.getElementById('empty-transactions').classList.toggle('hidden', txs.length > 0);
+
+            if (!groupByDate) {
+                list.innerHTML = txs.map(t => renderTxItem(t, false)).join('');
+                return;
+            }
+
+            const groups = new Map();
+            txs.forEach(t => {
+                if (!groups.has(t.date)) groups.set(t.date, []);
+                groups.get(t.date).push(t);
+            });
+
+            let html = '';
+            groups.forEach((items, date) => {
+                const label = dayHeaderLabel(date);
+                const inc = items.filter(t => t.type === 'income').reduce((a, t) => a + t.value, 0);
+                const exp = items.filter(t => t.type !== 'income').reduce((a, t) => a + t.value, 0);
+                html += `
+                    <section aria-label="${esc(label)}" class="day-group">
+                        <div class="day-head">
+                            <h3>${esc(label)}</h3>
+                            <div class="chip-row" style="flex-wrap:nowrap">
+                                ${inc > 0 ? `<span class="chip chip-lime">+ ${formatCurrency(inc)}</span>` : ''}
+                                ${exp > 0 ? `<span class="chip chip-magenta">− ${formatCurrency(exp)}</span>` : ''}
+                            </div>
+                        </div>
+                        ${items.map(t => renderTxItem(t, true)).join('')}
+                    </section>`;
+            });
+            list.innerHTML = html;
+        }
+
+        const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+        const NEON_PALETTE = ['#00F3FF', '#FF00FF', '#CCFF00', '#BD00FF', '#FFD21F', '#3b82f6'];
+
+        function initCharts() {
+            if (typeof Chart === 'undefined') return; // CDN indisponível (ex.: primeiro acesso offline)
+            Chart.defaults.font.family = "'IBM Plex Sans', system-ui, sans-serif";
+            Chart.defaults.font.weight = 600;
+
+            const ctxCard = document.getElementById('chartCreditCard').getContext('2d');
+            charts.creditCard = new Chart(ctxCard, {
+                type: 'bar',
+                data: { labels: [], datasets: [] },
+                options: {
+                    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+                    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + formatCurrency(c.raw) } } },
+                    scales: { x: { display: false }, y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 12 } } } }
+                }
+            });
+
+            const ctxCat = document.getElementById('chartCategories').getContext('2d');
+            charts.categories = new Chart(ctxCat, {
+                type: 'doughnut',
+                data: { labels: [], datasets: [] },
+                options: {
+                    responsive: true, maintainAspectRatio: false, cutout: '58%',
+                    plugins: {
+                        legend: { position: 'right', labels: { boxWidth: 14, padding: 10, font: { size: 12 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const pct = total > 0 ? ((context.raw / total) * 100).toFixed(1) : 0;
+                                    return ` ${context.label}: ${formatCurrency(context.raw)} (${pct}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function updateCharts(catTotalsObj, cardData) {
+            if (!charts.categories || !charts.creditCard) return;
+            const ink = cssVar('--ink'), border = cssVar('--border');
+            Chart.defaults.color = ink;
+
+            charts.creditCard.options.scales.y.ticks = { color: ink, font: { size: 12 } };
+            charts.creditCard.data.labels = cardData.map(c => c.name);
+            charts.creditCard.data.datasets = [{
+                data: cardData.map(c => c.total),
+                backgroundColor: cardData.map(c => c.color),
+                borderColor: border, borderWidth: 2, borderRadius: 6, borderSkipped: false
+            }];
+            charts.creditCard.update();
+
+            const labels = [], data = [];
+            for (const [id, total] of Object.entries(catTotalsObj)) {
+                if (total > 0) {
+                    const c = appData.categories.find(cat => cat.id === id);
+                    labels.push(c ? c.name : 'Outros'); data.push(total);
+                }
+            }
+            charts.categories.options.plugins.legend.labels.color = ink;
+            charts.categories.data.labels = labels;
+            charts.categories.data.datasets = [{
+                data, backgroundColor: NEON_PALETTE, borderWidth: 2.5, borderColor: border
+            }];
+            charts.categories.update();
+        }
+
+        function updateChartTheme() { if(charts.categories) renderData(); }
+
+        const TAB_COLORS = ['cyan', 'magenta', 'lime', 'purple', 'yellow'];
+
+        function renderGoals() {
+            const list = document.getElementById('goals-list');
+            const goals = alive(appData.goals);
+            document.getElementById('empty-goals').classList.toggle('hidden', goals.length > 0);
+
+            list.innerHTML = goals.map((g, i) => {
+                const pct = g.target > 0 ? Math.min((g.current / g.target) * 100, 100) : 0;
+                const isDone = pct >= 100;
+                let dateTxt = 'Sem prazo definido';
+                if (g.deadline) { const [y, m] = g.deadline.split('-'); dateTxt = `Prazo: ${m}/${y}`; }
+                const tab = isDone ? 'lime' : TAB_COLORS[i % TAB_COLORS.length];
+
+                return `
+                    <div class="folder tab-${tab} nb item-card">
+                        <div class="item-head">
+                            <div>
+                                <h4 class="item-title">${esc(g.name)} ${isDone ? '<span class="chip chip-lime"><i aria-hidden="true" class="fa-solid fa-circle-check"></i> Concluída</span>' : ''}</h4>
+                                <p class="item-sub">${dateTxt}</p>
+                            </div>
+                            <div class="item-actions">
+                                <button onclick="quickAddGoalProgress('${sid(g.id)}')" title="Aumentar progresso" aria-label="Aumentar progresso da meta ${esc(g.name)}" class="icon-btn icon-btn-sm icon-btn-flat hover-lime"><i aria-hidden="true" class="fa-solid fa-plus"></i></button>
+                                <button onclick="openGoalModal('${sid(g.id)}')" title="Editar" aria-label="Editar meta ${esc(g.name)}" class="icon-btn icon-btn-sm icon-btn-flat"><i aria-hidden="true" class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteGoal('${sid(g.id)}')" title="Apagar" aria-label="Apagar meta ${esc(g.name)}" class="icon-btn icon-btn-sm icon-btn-flat hover-magenta"><i aria-hidden="true" class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="item-values">
+                                <span class="item-amount">${formatCurrency(g.current)}</span>
+                                <span class="item-pct">de ${formatCurrency(g.target)}</span>
+                            </div>
+                            <div class="bar" role="progressbar" aria-label="Progresso da meta ${esc(g.name)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><i aria-hidden="true" class="${pct > 0 && pct < 100 ? 'edge' : ''}" style="width:${pct}%"></i></div>
+                            <p class="item-sub" style="text-align:right;margin-top:6px;font-weight:700">${pct.toFixed(1)}% concluído</p>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function getFilteredTransactions() {
+            const m = currentViewDate.getMonth() + 1; 
+            const y = currentViewDate.getFullYear();
+            const viewUser = document.getElementById('view-user-filter').value;
+            
+            const searchVal = (document.getElementById('extrato-search')?.value || '').toLowerCase();
+            const typeFilter = document.getElementById('extrato-type-filter')?.value || 'all';
+            const paymentFilter = document.getElementById('extrato-payment-filter')?.value || 'all';
+            const minValStr = document.getElementById('extrato-min-val')?.value;
+            const maxValStr = document.getElementById('extrato-max-val')?.value;
+            const dateFilter = document.getElementById('extrato-date-filter')?.value;
+
+            const minVal = minValStr !== '' && !isNaN(minValStr) ? parseFloat(minValStr) : null;
+            const maxVal = maxValStr !== '' && !isNaN(maxValStr) ? parseFloat(maxValStr) : null;
+
+            const hasActiveFilters = Boolean(searchVal || typeFilter !== 'all' || paymentFilter !== 'all' || minValStr || maxValStr || dateFilter);
+            const btnClear = document.getElementById('btn-clear-filters');
+            if (btnClear) btnClear.classList.toggle('hidden', !hasActiveFilters);
+
+            return alive(appData.transactions).filter(t => {
+                let d = getEffectiveDate(t);
+                
+                const matchesMonth = dateFilter ? true : (d.getMonth() + 1 === m && d.getFullYear() === y);
+                
+                const matchesUser = (viewUser === 'all' || t.userId === viewUser || t.userId === 'both');
+                const matchesSearch = (!searchVal || (t.desc && t.desc.toLowerCase().includes(searchVal)));
+                const matchesType = (typeFilter === 'all' || t.type === typeFilter);
+                const matchesPayment = (paymentFilter === 'all' || t.payment === paymentFilter);
+
+                const matchesMinVal = (minVal === null || t.value >= minVal);
+                const matchesMaxVal = (maxVal === null || t.value <= maxVal);
+                const matchesDate = (!dateFilter || t.date === dateFilter);
+
+                return matchesMonth && matchesUser && matchesSearch && matchesType && matchesPayment && matchesMinVal && matchesMaxVal && matchesDate;
+            }).sort((a, b) => String(b.date).localeCompare(String(a.date)) || (b.updatedAt || 0) - (a.updatedAt || 0));
+        }
+
+        function clearExtratoFilters() {
+            if (document.getElementById('extrato-search')) document.getElementById('extrato-search').value = '';
+            if (document.getElementById('extrato-type-filter')) document.getElementById('extrato-type-filter').value = 'all';
+            if (document.getElementById('extrato-payment-filter')) document.getElementById('extrato-payment-filter').value = 'all';
+            if (document.getElementById('extrato-min-val')) document.getElementById('extrato-min-val').value = '';
+            if (document.getElementById('extrato-max-val')) document.getElementById('extrato-max-val').value = '';
+            if (document.getElementById('extrato-date-filter')) document.getElementById('extrato-date-filter').value = '';
+            renderData();
+            showToast("Filtros limpos!");
+        }
+
+        function calculatePreviousBalance() {
+            if (!appData.settings.enableRollover) return 0;
+            const m = currentViewDate.getMonth() + 1; const y = currentViewDate.getFullYear();
+            const viewUser = document.getElementById('view-user-filter').value;
+            const threshold = new Date(y, m - 1, 1);
+            let prevBalance = 0;
+            alive(appData.transactions).forEach(t => {
+                let d = getEffectiveDate(t);
+                if ((viewUser === 'all' || t.userId === viewUser || t.userId === 'both') && d < threshold) {
+                    if (t.type === 'income') {
+                        prevBalance += shareValue(t);
+                    } else if (isTransactionDebited(t)) {
+                        prevBalance -= shareValue(t);
+                    }
+                }
+            });
+            return prevBalance;
+        }
+
+        function renderCategories(catTotals) {
+            const list = document.getElementById('categories-list');
+            list.innerHTML = alive(appData.categories).map((cat, i) => {
+                const spent = catTotals[cat.id] || 0;
+                const pct = cat.budget > 0 ? Math.min((spent / cat.budget) * 100, 100) : 0;
+                const over = cat.budget > 0 && spent > cat.budget;
+                const tab = TAB_COLORS[i % TAB_COLORS.length];
+
+                return `
+                    <div class="folder tab-${tab} nb item-card ${over ? 'over' : ''}">
+                        <div class="item-head">
+                            <div>
+                                <h4 class="item-title">${esc(cat.name)} ${over ? '<span class="chip chip-magenta"><i aria-hidden="true" class="fa-solid fa-triangle-exclamation"></i> Teto excedido</span>' : ''}</h4>
+                                <p class="item-sub">${cat.budget > 0 ? 'Teto: ' + formatCurrency(cat.budget) : 'Sem teto definido'}</p>
+                            </div>
+                            <div class="item-actions">
+                                <button onclick="openCategoryModal('${sid(cat.id)}')" title="Editar" aria-label="Editar categoria ${esc(cat.name)}" class="icon-btn icon-btn-sm icon-btn-flat"><i aria-hidden="true" class="fa-solid fa-pen"></i></button>
+                                <button onclick="deleteCategory('${sid(cat.id)}')" title="Apagar" aria-label="Apagar categoria ${esc(cat.name)}" class="icon-btn icon-btn-sm icon-btn-flat hover-magenta"><i aria-hidden="true" class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="item-values">
+                                <span class="item-amount ${over ? 'neg' : ''}">${formatCurrency(spent)}</span>
+                                <span class="item-pct">${pct.toFixed(1)}%</span>
+                            </div>
+                            <div class="bar" role="progressbar" aria-label="Gasto em ${esc(cat.name)}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><i aria-hidden="true" class="${pct > 0 && pct < 100 ? 'edge' : ''}" style="width:${pct}%"></i></div>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        window.onload = () => {
+            try { groupByDate = localStorage.getItem('fin_group_by_date') !== '0'; } catch (e) {}
+            const groupCb = document.getElementById('extrato-group');
+            if (groupCb) groupCb.checked = groupByDate;
+
+            const hdr = document.getElementById('main-header');
+            const setTopbar = () => document.documentElement.style.setProperty('--topbar-h', hdr.offsetHeight + 'px');
+            setTopbar();
+            if ('ResizeObserver' in window) new ResizeObserver(setTopbar).observe(hdr); else window.addEventListener('resize', setTopbar);
+
+            initCharts();
+            loadLocalData();
+            applySettings();
+            updateMonthDisplay();
+            renderData();
+
+            // Sincroniza ao abrir, ao voltar para o app, ao reconectar e a cada 2 min com o app visível
+            syncDataFromCloud({ silent: true });
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') syncDataFromCloud({ silent: true });
+            });
+            window.addEventListener('online', () => syncDataFromCloud({ silent: true }));
+            setInterval(() => {
+                if (document.visibilityState === 'visible') syncDataFromCloud({ silent: true });
+            }, 120000);
+
+            // Service worker: abre mais rápido e funciona offline
+            if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+                navigator.serviceWorker.register('sw.js').catch(() => {});
+            }
+        };
+    </script>
+</body>
+</html>
