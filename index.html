@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Nossas Finanças - Casal</title>
     
-    <!-- Fontes: IBM Plex Sans -->
+    <!-- Fonte: IBM Plex Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -39,7 +39,7 @@
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100vh;display:flex;justify-content:center;font-family:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:15px;line-height:1.4;color:var(--ink);background:var(--bg);transition:background-color .3s}
+body{margin:0;min-height:100vh;display:flex;justify-content:center;font-family:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:14px;line-height:1.4;color:var(--ink);background:var(--bg);transition:background-color .3s}
 button,input,select{font:inherit;color:inherit}
 button{cursor:pointer;background:none;border:0;padding:0}
 h1,h2,h3,h4,p{margin:0}
@@ -82,9 +82,9 @@ i{font-style:normal}
 .sidebar.collapsed .sidebar-top{flex-direction:column;gap:14px}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}
 .brand-logo{width:42px;height:42px;flex:none;display:grid;place-items:center;font-weight:700;font-size:21px;background:var(--yellow);color:var(--on-neon);border:var(--bw) solid var(--border);border-radius:12px;box-shadow:3px 3px 0 var(--shadow)}
-.brand-name{font-weight:700;font-size:17px;line-height:1.05;letter-spacing:-.01em}
+.brand-name{font-weight:700;font-size:15px;line-height:1.1;letter-spacing:-.03em}
 .side-nav,.side-actions{display:flex;flex-direction:column;gap:10px}
-.nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border:var(--bw) solid transparent;border-radius:14px;font-weight:600;font-size:14px;text-align:left;color:var(--ink);transition:transform .1s,box-shadow .1s,background .1s}
+.nav-item{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border:var(--bw) solid transparent;border-radius:14px;font-weight:600;font-size:13px;text-align:left;color:var(--ink);transition:transform .1s,box-shadow .1s,background .1s}
 .nav-item i{width:22px;text-align:center;font-size:16px;flex:none}
 .nav-item:hover{background:var(--paper-2)}
 .nav-item.is-active{background:var(--cyan);color:var(--on-neon);border-color:var(--border);box-shadow:3px 3px 0 var(--shadow)}
@@ -94,7 +94,7 @@ i{font-style:normal}
 .topbar{position:sticky;top:0;z-index:20;display:flex;flex-direction:column;gap:12px;padding:16px 18px 14px;background:var(--paper);border-bottom:3px solid var(--border)}
 @media(min-width:768px){.topbar{position:static;flex-direction:row;align-items:center;justify-content:space-between;padding:18px 30px}}
 .topbar-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
-.page-title{font-size:clamp(26px,6vw,34px);font-weight:700;letter-spacing:-.03em;line-height:1.05}
+.page-title{font-size:clamp(22px,5.6vw,30px);font-weight:700;letter-spacing:-.05em;line-height:1.1}
 .hl{display:inline-block;padding:0 .24em;background:var(--cyan);color:var(--on-neon);border:var(--bw) solid var(--border);border-radius:10px;box-shadow:3px 3px 0 var(--shadow);transform:rotate(-1.5deg)}
 .mobile-actions{display:flex;gap:10px}
 @media(min-width:768px){.mobile-actions{display:none}}
@@ -102,7 +102,7 @@ i{font-style:normal}
 .month{flex:1;display:flex;align-items:center;gap:4px;padding:4px;background:var(--paper);border:var(--bw) solid var(--border);border-radius:999px;box-shadow:3px 3px 0 var(--shadow)}
 .month button{width:38px;height:38px;flex:none;display:grid;place-items:center;border-radius:50%}
 .month button:hover{background:var(--paper-2)}
-.month span{flex:1;text-align:center;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.month span{flex:1;text-align:center;font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
 @media(min-width:768px){.month{flex:none;min-width:240px}}
 
 /* ---- blocos básicos ---- */
@@ -116,9 +116,9 @@ i{font-style:normal}
 @media(min-width:768px){.grid-2{grid-template-columns:1fr 1fr}.grid-3{grid-template-columns:1fr 1fr}}
 @media(min-width:1100px){.grid-3{grid-template-columns:1fr 1fr 1fr}}
 .stack{display:flex;flex-direction:column;gap:12px}
-.section-title{font-size:20px;font-weight:700;letter-spacing:-.02em;margin:24px 0 4px}
+.section-title{font-size:18px;font-weight:700;letter-spacing:-.03em;margin:24px 0 4px}
 .view-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.view-head h2{font-size:clamp(24px,5vw,30px);font-weight:700;letter-spacing:-.03em;line-height:1.1}
+.view-head h2{font-size:clamp(22px,5vw,28px);font-weight:700;letter-spacing:-.05em;line-height:1.1}
 .view-head p{font-size:13px;color:var(--muted);margin-top:2px}
 .help{font-size:12px;color:var(--muted)}
 .empty{text-align:center;padding:48px 0;color:var(--muted)}
@@ -130,14 +130,14 @@ i{font-style:normal}
 .ico-cyan{--c:var(--cyan)} .ico-magenta{--c:var(--magenta)} .ico-lime{--c:var(--lime)} .ico-purple{--c:var(--purple)} .ico-yellow{--c:var(--yellow)} .ico-paper{--c:var(--paper);color:var(--ink)}
 .ico-lg{width:42px;height:42px;font-size:17px}
 
-.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:var(--paper);color:var(--ink);border:2px solid var(--border);border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;line-height:1.25;white-space:nowrap}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;background:var(--paper);color:var(--ink);border:2px solid var(--border);border-radius:999px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0;line-height:1.25;white-space:nowrap}
 .chip b{font-weight:700;text-transform:none;letter-spacing:0}
 .chip-cyan{background:var(--cyan);color:var(--on-neon)} .chip-magenta{background:var(--magenta);color:var(--on-neon)} .chip-lime{background:var(--lime);color:var(--on-neon)} .chip-purple{background:var(--purple);color:var(--on-neon)} .chip-yellow{background:var(--yellow);color:var(--on-neon)}
 button.chip:hover{transform:translate(-1px,-1px)}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px}
 
 /* ---- botões ---- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;background:var(--yellow);color:var(--on-neon);border:var(--bw) solid var(--border);border-radius:14px;box-shadow:3px 3px 0 var(--shadow);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;transition:transform .08s,box-shadow .08s}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 16px;background:var(--yellow);color:var(--on-neon);border:var(--bw) solid var(--border);border-radius:14px;box-shadow:3px 3px 0 var(--shadow);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.02em;transition:transform .08s,box-shadow .08s}
 .btn:hover,.icon-btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--shadow)}
 .btn:active,.icon-btn:active{transform:translate(3px,3px);box-shadow:0 0 0 var(--shadow)}
 .btn-cyan{background:var(--cyan)} .btn-lime{background:var(--lime)} .btn-magenta{background:var(--magenta)} .btn-purple{background:var(--purple)}
@@ -152,7 +152,7 @@ button.chip:hover{transform:translate(-1px,-1px)}
 .hover-lime{--c:var(--lime)} .hover-magenta{--c:var(--magenta)}
 
 /* ---- campos ---- */
-.input,.select{width:100%;padding:11px 14px;background:var(--paper);color:var(--ink);border:var(--bw) solid var(--border);border-radius:12px;box-shadow:3px 3px 0 var(--shadow);font-size:14px;font-weight:500;appearance:none;-webkit-appearance:none}
+.input,.select{width:100%;padding:11px 14px;background:var(--paper);color:var(--ink);border:var(--bw) solid var(--border);border-radius:12px;box-shadow:3px 3px 0 var(--shadow);font-size:13px;font-weight:500;appearance:none;-webkit-appearance:none}
 .input::placeholder{color:var(--muted);opacity:.8}
 .input:focus,.select:focus{outline:3px solid var(--focus);outline-offset:2px}
 .select{padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5 7 7l5.5-5.5' fill='none' stroke='%230B0B0F' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center}
@@ -160,11 +160,11 @@ button.chip:hover{transform:translate(-1px,-1px)}
 .select-neon{background-color:var(--lime);color:var(--on-neon);font-weight:700;width:auto;min-width:150px}
 .dark .select-neon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5 7 7l5.5-5.5' fill='none' stroke='%230B0B0F' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
 .form{display:flex;flex-direction:column;gap:16px}
-.field label,.label{display:block;margin:0 0 7px 2px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.field label,.label{display:block;margin:0 0 7px 2px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .money{position:relative}
 .money > span{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-weight:700}
-.money .input{padding-left:46px;font-size:18px;font-weight:700}
+.money .input{padding-left:46px;font-size:17px;font-weight:700}
 .search{position:relative}
 .search > i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted)}
 .search .input{padding-left:40px}
@@ -179,7 +179,7 @@ button.chip:hover{transform:translate(-1px,-1px)}
 .toggle{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:13px;cursor:pointer;user-select:none}
 .seg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .seg label{display:block;cursor:pointer}
-.seg-item{display:block;text-align:center;padding:12px;background:var(--paper);border:var(--bw) solid var(--border);border-radius:12px;box-shadow:3px 3px 0 var(--shadow);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.05em;transition:transform .08s,box-shadow .08s}
+.seg-item{display:block;text-align:center;padding:12px;background:var(--paper);border:var(--bw) solid var(--border);border-radius:12px;box-shadow:3px 3px 0 var(--shadow);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.02em;transition:transform .08s,box-shadow .08s}
 .seg input:checked + .seg-expense{background:var(--magenta);color:var(--on-neon);transform:translate(3px,3px);box-shadow:none}
 .seg input:checked + .seg-income{background:var(--lime);color:var(--on-neon);transform:translate(3px,3px);box-shadow:none}
 .seg input:focus-visible + .seg-item{outline:3px solid var(--focus);outline-offset:2px}
@@ -206,12 +206,12 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 .panel-cyan{background:var(--cyan);color:var(--on-neon)}
 .view-available{display:none;flex-direction:column;gap:8px}
 .view-available.active{display:flex;animation:slideFade .25s ease-out}
-.panel-label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.panel-label{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
 .panel-label .lbl{display:flex;align-items:center;gap:10px}
-.big{font-size:clamp(30px,7vw,40px);font-weight:700;letter-spacing:-.03em;line-height:1.05}
+.big{font-size:clamp(26px,6.4vw,34px);font-weight:700;letter-spacing:-.05em;line-height:1.1}
 .hint{opacity:.6;font-size:13px}
 .proj{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:16px 18px}
-.proj-value{font-size:clamp(24px,6vw,32px);font-weight:700;letter-spacing:-.03em}
+.proj-value{font-size:clamp(20px,5.2vw,28px);font-weight:700;letter-spacing:-.05em}
 .chart-card{padding:18px}
 .chart-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
 .chart-title h3{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
@@ -229,15 +229,15 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 .day-group{display:flex;flex-direction:column;gap:12px;margin-bottom:12px}
 .day-head{position:sticky;top:var(--topbar-h,0);z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;background:var(--paper);border-bottom:2px dashed var(--border)}
 @media(min-width:768px){.day-head{top:-26px;padding-top:10px}}
-.day-head h3{font-size:15px;font-weight:700;letter-spacing:-.01em}
+.day-head h3{font-size:13px;font-weight:700;letter-spacing:-.02em}
 .tx{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;background:var(--paper);border:var(--bw) solid var(--border);border-radius:14px;box-shadow:3px 3px 0 var(--shadow)}
 .tx-left{display:flex;align-items:center;gap:12px;min-width:0}
 .tx-body{min-width:0}
 .tx-head{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
-.tx-title{font-weight:700;font-size:15px;overflow-wrap:anywhere}
+.tx-title{font-weight:700;font-size:14px;overflow-wrap:anywhere}
 .tx-meta{display:block;margin-top:3px;font-size:12px;color:var(--muted)}
 .tx-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex:none}
-.tx-amount{font-weight:700;font-size:15px;white-space:nowrap}
+.tx-amount{font-weight:700;font-size:14px;white-space:nowrap;letter-spacing:-.03em}
 .tx-actions{display:flex;gap:6px}
 @media(min-width:640px){.tx-right{flex-direction:row;align-items:center;gap:14px}}
 .datebox{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;width:42px;height:42px;background:var(--paper-2);border:2px solid var(--border);border-radius:10px;line-height:1.05}
@@ -246,11 +246,11 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 /* ---- categorias / metas / cartões ---- */
 .item-card{padding:16px;display:flex;flex-direction:column;gap:14px;margin-bottom:6px}
 .item-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
-.item-title{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.item-title{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .item-sub{font-size:12px;color:var(--muted);margin-top:2px}
 .item-actions{display:flex;gap:6px;flex:none}
 .item-values{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}
-.item-amount{font-size:20px;font-weight:700;letter-spacing:-.02em}
+.item-amount{font-size:18px;font-weight:700;letter-spacing:-.04em}
 .item-pct{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
 .bar{height:16px;background:var(--paper-2);border:2px solid var(--border);border-radius:999px;overflow:hidden}
 .bar > i{display:block;height:100%;background:var(--tab,var(--cyan));transition:width .8s}
@@ -267,7 +267,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 .modal-content{width:100%;max-height:92vh;overflow-y:auto;padding:22px 20px calc(24px + env(safe-area-inset-bottom,0px));background:var(--paper);color:var(--ink);border:3px solid var(--border);border-bottom:0;border-radius:26px 26px 0 0;animation:sheetUp .25s ease-out}
 @media(min-width:768px){.modal-content{max-width:520px;max-height:90vh;border:3px solid var(--border);border-radius:24px;box-shadow:8px 8px 0 var(--shadow)}}
 .sheet-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:20px}
-.sheet-head h2{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.sheet-head h2{font-size:19px;font-weight:700;letter-spacing:-.04em}
 .link-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:12px 14px;text-align:left;background:var(--paper-2);border:var(--bw) solid var(--border);border-radius:12px}
 .link-row strong{display:block;font-size:13px}
 .link-btn{font-size:12px;font-weight:700;text-decoration:underline}
@@ -282,7 +282,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 .mobile-nav-wrap{position:fixed;left:0;right:0;bottom:0;z-index:40}
 @media(min-width:768px){.mobile-nav-wrap{display:none}}
 .mobile-nav{display:flex;align-items:center;justify-content:space-between;height:70px;padding:0 6px env(safe-area-inset-bottom,0px);background:var(--paper);border-top:3px solid var(--border)}
-.nav-btn{width:20%;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;color:var(--muted)}
+.nav-btn{width:20%;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;color:var(--muted)}
 .nav-btn .nav-ico{display:grid;place-items:center;width:46px;height:30px;border:2px solid transparent;border-radius:10px;font-size:16px}
 .nav-btn.is-active{color:var(--ink)}
 .nav-btn.is-active .nav-ico{background:var(--cyan);color:var(--on-neon);border-color:var(--border);box-shadow:2px 2px 0 var(--shadow)}
@@ -306,7 +306,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 .splash-logo span{display:block;animation:splashWiggle .5s ease-in-out 1.65s both}
 .splash-coin{position:absolute;z-index:0;left:50%;top:-10px;width:48px;height:48px;display:grid;place-items:center;background:var(--yellow);color:var(--on-neon);border:3px solid var(--border);border-radius:50%;box-shadow:inset 0 0 0 3px rgba(11,11,15,.18);font-size:24px;line-height:1;opacity:0;animation:splashCoin .62s cubic-bezier(.45,0,.75,.6) .95s both}
 .splash-coin b{font-weight:700}
-.splash-title{font-size:clamp(28px,8vw,40px);font-weight:700;letter-spacing:-.03em;text-align:center;animation:splashUp .55s cubic-bezier(.2,.9,.3,1) .55s both}
+.splash-title{font-size:clamp(22px,6.4vw,34px);font-weight:700;letter-spacing:-.05em;text-align:center;animation:splashUp .55s cubic-bezier(.2,.9,.3,1) .55s both}
 @keyframes splashPop{0%{transform:scale(0) rotate(-24deg)}100%{transform:scale(1) rotate(0)}}
 @keyframes splashPress{0%{box-shadow:9px 9px 0 var(--shadow);transform:none}100%{box-shadow:5px 5px 0 var(--shadow);transform:translate(4px,4px)}}
 @keyframes splashCatch{0%{transform:translate(4px,4px) scale(1)}35%{transform:translate(4px,4px) scale(1.1,.88)}70%{transform:translate(4px,4px) scale(.97,1.04)}100%{transform:translate(4px,4px) scale(1)}}
@@ -324,6 +324,22 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 @keyframes splashSlideL{0%{transform:translateX(-80%)}100%{transform:none}}
 @keyframes splashSlideR{0%{transform:translateX(80%)}100%{transform:none}}
 @media(prefers-reduced-motion:reduce){.splash-circle,.splash-wedge,.splash-logo-wrap,.splash-logo,.splash-logo span,.splash-title{animation:none!important}.splash-coin{display:none}.splash{transition:opacity .2s}}
+
+/* ---- fatura, compromissos, evolução ---- */
+.tile-btn{margin-top:10px;width:100%}
+.tiles-3{grid-template-columns:1fr}
+@media(min-width:640px){.tiles-3{grid-template-columns:repeat(3,1fr)}}
+.chart-wrap-md{height:240px}
+.cmp-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;margin:18px 0 4px}
+.cmp-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 0;border-top:2px dashed var(--border);font-size:13px}
+.cmp-row small{display:block;color:var(--muted);font-size:11px}
+.crow{display:grid;grid-template-columns:58px 1fr auto;gap:10px;align-items:center}
+.crow-m{font-size:12px;font-weight:700;text-transform:uppercase}
+.crow-v{font-size:13px;font-weight:700;white-space:nowrap}
+.cbar{display:flex;height:16px;background:var(--paper-2);border:2px solid var(--border);border-radius:999px;overflow:hidden}
+.cbar > i{display:block;height:100%}
+.sub-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+.stack-sm{display:flex;flex-direction:column;gap:10px}
 
     </style>
 </head>
@@ -381,6 +397,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             <div class="side-actions">
                 <button class="btn btn-block" onclick="openTransactionModal()" title="Novo Lançamento" aria-label="Novo Lançamento"><i aria-hidden="true" class="fa-solid fa-plus"></i><span class="sidebar-label">Novo Lançamento</span></button>
                 <div class="nav-divider"></div>
+                <button id="btn-privacy-sb" class="nav-item" onclick="togglePrivacy()" aria-pressed="false" title="Ocultar valores" aria-label="Ocultar valores"><i aria-hidden="true" id="privacy-icon-sb" class="fa-solid fa-eye"></i><span id="privacy-text-sb" class="sidebar-label">Ocultar valores</span></button>
                 <button class="nav-item" onclick="toggleDarkMode()" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro"><i aria-hidden="true" id="theme-icon-sb" class="fa-solid fa-sun"></i><span id="theme-text-sb" class="sidebar-label">Tema</span></button>
                 <button id="btn-sync-sb" class="nav-item" onclick="syncDataFromCloud()" title="Sincronizar" aria-label="Sincronizar"><i aria-hidden="true" class="fa-solid fa-arrows-rotate"></i><span class="sidebar-label">Sincronizar</span></button>
                 <button class="nav-item" onclick="openSettings()" title="Configurações" aria-label="Configurações"><i aria-hidden="true" class="fa-solid fa-gear"></i><span class="sidebar-label">Configurações</span></button>
@@ -392,6 +409,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 <div class="topbar-row">
                     <h1 class="page-title">Nossas <span class="hl">Finanças</span></h1>
                     <div class="mobile-actions">
+                        <button id="btn-privacy-mb" class="icon-btn" onclick="togglePrivacy()" aria-pressed="false" title="Ocultar valores" aria-label="Ocultar valores"><i aria-hidden="true" id="privacy-icon-mb" class="fa-solid fa-eye"></i></button>
                         <button class="icon-btn" onclick="toggleDarkMode()" title="Alternar tema" aria-label="Alternar tema"><i aria-hidden="true" id="theme-icon-mb" class="fa-solid fa-sun"></i></button>
                         <button id="btn-sync-mb" class="icon-btn" onclick="syncDataFromCloud()" title="Sincronizar" aria-label="Sincronizar"><i aria-hidden="true" class="fa-solid fa-arrows-rotate"></i></button>
                         <button class="icon-btn" onclick="openSettings()" title="Configurações" aria-label="Configurações"><i aria-hidden="true" class="fa-solid fa-gear"></i></button>
@@ -508,6 +526,24 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                             <div class="chart-wrap chart-wrap-lg"><canvas id="chartCategories" role="img" aria-label="Gráfico de despesas por categoria"></canvas></div>
                         </div>
                     </div>
+
+                    <div class="folder tab-yellow nb chart-card">
+                        <div class="chart-title">
+                            <h3><span class="ico ico-yellow"><i aria-hidden="true" class="fa-solid fa-chart-column"></i></span> Evolução mensal</h3>
+                            <span class="chip">Últimos 6 meses</span>
+                        </div>
+                        <div class="chart-wrap chart-wrap-md"><canvas id="chartEvolution" role="img" aria-label="Gráfico de receitas, despesas e saldo dos últimos 6 meses"></canvas></div>
+                        <p id="evo-sr" class="sr-only"></p>
+                        <div id="evo-compare"></div>
+                    </div>
+
+                    <div class="folder tab-lime nb chart-card">
+                        <div class="chart-title">
+                            <h3><span class="ico ico-lime"><i aria-hidden="true" class="fa-solid fa-calendar-check"></i></span> Compromissos futuros</h3>
+                            <button class="btn btn-sm btn-lime" onclick="openCommitments()">Ver detalhes</button>
+                        </div>
+                        <div id="commit-summary" class="tiles tiles-3" style="margin-bottom:0"></div>
+                    </div>
                 </section>
 
                 <!-- ===== EXTRATO ===== -->
@@ -528,7 +564,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                                 <option value="income">Apenas receitas</option>
                             </select>
                             <select id="extrato-payment-filter" class="select" aria-label="Filtrar por forma de pagamento" onchange="renderData()">
-                                <option value="all">Todas as formas de pagamento</option>
+                                <option value="all">Todos os pagamentos</option>
                                 <option value="pix">Pix</option>
                                 <option value="debito">Débito</option>
                                 <option value="credito_vista">Crédito à vista</option>
@@ -684,8 +720,29 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                         <input type="checkbox" id="set-enable-rollover" class="switch" checked>
                         <div><label for="set-enable-rollover">Transferir saldo anterior</label><span class="help">Acumula positivo/negativo entre os meses passados</span></div>
                     </div>
+                    <div class="field">
+                        <span class="label">Backup e exportação</span>
+                        <div class="stack-sm">
+                            <button type="button" class="btn btn-paper btn-block" onclick="exportBackup()"><i aria-hidden="true" class="fa-solid fa-download"></i> Baixar backup (.json)</button>
+                            <button type="button" class="btn btn-paper btn-block" onclick="document.getElementById('backup-file').click()"><i aria-hidden="true" class="fa-solid fa-upload"></i> Restaurar backup</button>
+                            <button type="button" class="btn btn-paper btn-block" onclick="exportCsv()"><i aria-hidden="true" class="fa-solid fa-file-csv"></i> Extrato do mês (.csv)</button>
+                            <input type="file" id="backup-file" class="sr-only" accept=".json,application/json" onchange="importBackup(this)" aria-label="Arquivo de backup">
+                            <p class="help">O backup não inclui a URL nem a senha de sincronização. Ao restaurar, os dados são mesclados com os atuais (nada é apagado).</p>
+                        </div>
+                    </div>
                     <button onclick="saveSettings()" class="btn btn-block">Salvar configurações</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- ===== MODAL COMPROMISSOS ===== -->
+        <div id="modal-commitments" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-commitments-title">
+            <div class="modal-content">
+                <div class="sheet-head">
+                    <h2 id="modal-commitments-title">Compromissos futuros</h2>
+                    <button onclick="closeModal('modal-commitments')" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="commitments-body" style="display:flex;flex-direction:column;gap:24px"></div>
             </div>
         </div>
 
@@ -720,6 +777,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                             </select></div>
                         <div class="field"><label for="cardDue">Dia do vencimento</label><input type="number" id="cardDue" class="input" min="1" max="31" required></div>
                     </div>
+                    <div class="field"><label for="cardClose">Dia do fechamento (opcional)</label><input type="number" id="cardClose" class="input" min="1" max="31" placeholder="Ex: 3"><span class="help">Compras depois desse dia entram na fatura seguinte. Se ficar vazio, o vencimento é usado como corte.</span></div>
                     <fieldset><legend>Cor</legend><div id="card-colors" class="swatches"></div></fieldset>
                     <button type="submit" class="btn btn-purple btn-block">Salvar cartão</button>
                 </form>
@@ -753,6 +811,8 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
         let currentAvailableViewIndex = 0;
         let currentExpenseViewIndex = 0;
         let groupByDate = true;
+        let privacyMode = false;
+        const MONTHS_ABBR = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         let renderTimer = null;
 
         // ---------- Utilitários ----------
@@ -796,6 +856,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
         }
 
         function formatCurrency(val) {
+            if (privacyMode) return 'R$ ••••';
             return Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         }
 
@@ -1181,7 +1242,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                         <span class="manage-bar" style="background:${safeColor(c.color)}"></span>
                         <div style="min-width:0">
                             <p class="manage-name">${esc(c.name)}</p>
-                            <p class="help">${esc(ownerLabel(c.owner))} • Vence dia ${Number(c.dueDay) || 10}</p>
+                            <p class="help">${esc(ownerLabel(c.owner))} • Vence dia ${Number(c.dueDay) || 10}${c.closingDay ? ' • Fecha dia ' + Number(c.closingDay) : ''}</p>
                         </div>
                     </div>
                     <div class="item-actions">
@@ -1199,6 +1260,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             document.getElementById('cardName').value = card ? card.name : '';
             document.getElementById('cardOwner').value = card ? card.owner : 'user1';
             document.getElementById('cardDue').value = card ? (card.dueDay || 10) : 10;
+            document.getElementById('cardClose').value = card && card.closingDay ? card.closingDay : '';
             const current = card ? safeColor(card.color) : CARD_COLORS[aliveCards().length % CARD_COLORS.length].hex;
             document.getElementById('card-colors').innerHTML = CARD_COLORS.map(c => `
                 <label class="swatch">
@@ -1217,6 +1279,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 name,
                 owner: document.getElementById('cardOwner').value,
                 dueDay: Math.min(31, Math.max(1, parseInt(document.getElementById('cardDue').value) || 10)),
+                closingDay: (v => v >= 1 ? Math.min(31, v) : undefined)(parseInt(document.getElementById('cardClose').value)),
                 color: document.querySelector('input[name="cardColor"]:checked')?.value || '#00F3FF'
             };
             const id = document.getElementById('cardId').value;
@@ -1268,6 +1331,39 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             if (match) sel.value = match.id;
         }
 
+        // Fatura de um cartão num mês (mês em que ela vence)
+        function cardInvoice(cardId, y, m0) {
+            const txs = alive(appData.transactions).filter(t => {
+                if (t.type !== 'expense' || !isCreditPayment(t.payment)) return false;
+                const c = getCardForTx(t);
+                if (!c || c.id !== cardId) return false;
+                const d = getEffectiveDate(t);
+                return d.getFullYear() === y && d.getMonth() === m0;
+            });
+            const total = txs.reduce((a, t) => a + t.value, 0);
+            const paidTotal = txs.filter(isTransactionDebited).reduce((a, t) => a + t.value, 0);
+            const status = !txs.length ? 'none' : paidTotal >= total - 0.005 ? 'paid' : paidTotal > 0 ? 'partial' : 'open';
+            return { txs, total, paidTotal, status };
+        }
+
+        // Pagar a fatura = marcar todas as compras dela como debitadas (sai do saldo disponível)
+        function payInvoice(cardId, undo = false) {
+            const card = appData.cards.find(c => c.id === cardId);
+            if (!card) return;
+            const y = currentViewDate.getFullYear(), m0 = currentViewDate.getMonth();
+            const inv = cardInvoice(cardId, y, m0);
+            if (!inv.txs.length) return;
+            const label = `${MONTHS_ABBR[m0]}/${y}`;
+            const msg = undo
+                ? `Desfazer o pagamento da fatura ${card.name} de ${label}?\n\nAs compras voltam a ficar pendentes e o valor volta para o saldo disponível.`
+                : `Marcar a fatura ${card.name} de ${label} como PAGA?\n\nValor em aberto: ${formatCurrency(inv.total - inv.paidTotal)}. Esse valor será debitado do saldo disponível.`;
+            if (!confirm(msg)) return;
+            const ts = nowTs();
+            inv.txs.forEach(t => { t.paid = !undo; t.updatedAt = ts; });
+            saveToCloud(); renderData();
+            showToast(undo ? 'Pagamento desfeito.' : 'Fatura paga!');
+        }
+
         function renderCardsSummary() {
             const wrap = document.getElementById('cards-summary');
             const chartWrap = document.getElementById('cards-chart-wrap');
@@ -1278,25 +1374,278 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 chartWrap.classList.add('hidden');
                 return [];
             }
-            const m = currentViewDate.getMonth() + 1, y = currentViewDate.getFullYear();
-            const totals = {};
-            alive(appData.transactions).forEach(t => {
-                if (t.type !== 'expense' || !isCreditPayment(t.payment)) return;
-                const d = getEffectiveDate(t);
-                if (d.getMonth() + 1 !== m || d.getFullYear() !== y) return;
-                const c = getCardForTx(t);
-                if (c) totals[c.id] = (totals[c.id] || 0) + t.value;
-            });
+            const y = currentViewDate.getFullYear(), m0 = currentViewDate.getMonth();
+            const invoices = {};
+            cards.forEach(c => { invoices[c.id] = cardInvoice(c.id, y, m0); });
             wrap.className = 'tiles';
             chartWrap.classList.remove('hidden');
             chartWrap.style.height = Math.max(144, cards.length * 34 + 16) + 'px';
-            wrap.innerHTML = cards.map(c => `
+            wrap.innerHTML = cards.map(c => {
+                const inv = invoices[c.id];
+                const statusChip = { paid: '<span class="chip chip-lime">Paga</span>', partial: '<span class="chip chip-yellow">Parcial</span>', open: '<span class="chip chip-yellow">Aberta</span>', none: '' }[inv.status];
+                const btn = inv.status === 'paid'
+                    ? `<button class="btn btn-sm btn-paper tile-btn" onclick="payInvoice('${sid(c.id)}', true)" aria-label="Desfazer pagamento da fatura ${esc(c.name)}">Desfazer</button>`
+                    : inv.status === 'none' ? ''
+                    : `<button class="btn btn-sm btn-purple tile-btn" onclick="payInvoice('${sid(c.id)}')" aria-label="Pagar fatura ${esc(c.name)}">${inv.status === 'partial' ? 'Pagar restante' : 'Pagar fatura'}</button>`;
+                return `
                 <div class="tile" style="--c:${safeColor(c.color)}">
                     <p>${esc(c.name)}</p>
-                    <p class="v">${formatCurrency(totals[c.id] || 0)}</p>
-                    <span class="chip">Venc. dia ${Number(c.dueDay) || 10}</span>
-                </div>`).join('');
-            return cards.map(c => ({ name: c.name, total: totals[c.id] || 0, color: safeColor(c.color) }));
+                    <p class="v">${formatCurrency(inv.total)}</p>
+                    <div class="chip-row"><span class="chip">Venc. dia ${Number(c.dueDay) || 10}</span>${c.closingDay ? `<span class="chip">Fecha dia ${Number(c.closingDay)}</span>` : ''}${statusChip}</div>
+                    ${btn}
+                </div>`;
+            }).join('');
+            return cards.map(c => ({ name: c.name, total: invoices[c.id].total, color: safeColor(c.color) }));
+        }
+
+        // ================= PRIVACIDADE =================
+        function applyPrivacy() {
+            ['mb', 'sb'].forEach(k => {
+                const i = document.getElementById('privacy-icon-' + k);
+                if (i) { i.classList.toggle('fa-eye', !privacyMode); i.classList.toggle('fa-eye-slash', privacyMode); }
+                const b = document.getElementById('btn-privacy-' + k);
+                if (b) {
+                    const t = privacyMode ? 'Mostrar valores' : 'Ocultar valores';
+                    b.setAttribute('aria-pressed', String(privacyMode)); b.title = t; b.setAttribute('aria-label', t);
+                }
+            });
+            const txt = document.getElementById('privacy-text-sb');
+            if (txt) txt.textContent = privacyMode ? 'Mostrar valores' : 'Ocultar valores';
+        }
+        function togglePrivacy() {
+            privacyMode = !privacyMode;
+            try { localStorage.setItem('fin_privacy', privacyMode ? '1' : '0'); } catch (e) {}
+            applyPrivacy(); renderData();
+            showToast(privacyMode ? 'Valores ocultos.' : 'Valores visíveis.');
+        }
+
+        // ================= BACKUP E EXPORTAÇÃO =================
+        function downloadFile(name, mime, content) {
+            const url = URL.createObjectURL(new Blob([content], { type: mime }));
+            const a = document.createElement('a');
+            a.href = url; a.download = name;
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 1500);
+        }
+        const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+
+        function exportBackup() {
+            const payload = {
+                app: 'nossas-financas', version: 2, exportedAt: new Date().toISOString(),
+                data: { transactions: appData.transactions, categories: appData.categories, goals: appData.goals, cards: appData.cards, settings: sharedSettings() }
+            };
+            downloadFile(`financas-backup-${todayStr()}.json`, 'application/json', JSON.stringify(payload, null, 1));
+            showToast('Backup baixado!');
+        }
+
+        // Só aceita itens bem formados (o arquivo pode ter sido editado à mão)
+        function sanitizeBackup(data) {
+            const isObj = x => x && typeof x === 'object' && !Array.isArray(x);
+            const okId = x => isObj(x) && typeof x.id === 'string' && x.id.length > 0 && x.id.length < 80;
+            const num = v => typeof v === 'number' && isFinite(v);
+            let skipped = 0;
+            const keep = (arr, valid) => (Array.isArray(arr) ? arr : []).filter(x => {
+                const ok = okId(x) && (x.deleted === true || valid(x));
+                if (!ok) skipped++;
+                return ok;
+            });
+            return {
+                skipped,
+                transactions: keep(data.transactions, t => (t.type === 'income' || t.type === 'expense') && num(t.value) && /^\d{4}-\d{2}-\d{2}$/.test(String(t.date)) && typeof t.desc === 'string'),
+                categories: keep(data.categories, c => typeof c.name === 'string' && (c.budget === undefined || num(c.budget))),
+                goals: keep(data.goals, g => typeof g.name === 'string' && num(g.target) && (g.current === undefined || num(g.current))),
+                cards: keep(data.cards, c => typeof c.name === 'string' && num(c.dueDay)),
+                settings: isObj(data.settings) ? data.settings : {}
+            };
+        }
+
+        function importBackup(input) {
+            const file = input.files && input.files[0];
+            input.value = '';
+            if (!file) return;
+            if (file.size > 10 * 1024 * 1024) { showToast('Arquivo grande demais.', true); return; }
+            const reader = new FileReader();
+            reader.onerror = () => showToast('Não consegui ler o arquivo.', true);
+            reader.onload = () => {
+                try {
+                    const parsed = JSON.parse(reader.result);
+                    const data = parsed && parsed.data ? parsed.data : parsed;
+                    if (!data || !Array.isArray(data.transactions)) throw new Error('formato');
+                    const inc = sanitizeBackup(data);
+                    const n = inc.transactions.filter(t => !t.deleted).length;
+                    const extra = inc.skipped ? `\n(${inc.skipped} item(ns) inválido(s) serão ignorados.)` : '';
+                    if (!confirm(`Mesclar este backup com os dados do aparelho?\n\n${n} lançamentos no arquivo. Nada é apagado: itens com o mesmo código ficam com a versão mais recente.${extra}`)) return;
+                    [inc.transactions, inc.categories, inc.goals, inc.cards].forEach(arr => arr.forEach(x => { if (!x.updatedAt) x.updatedAt = 1; }));
+                    mergeCloudIntoLocal(inc);
+                    migrateData(); ensureDefaultCards(); ensureFixedTransactionsForMonth();
+                    saveLocalData(); applySettings(); saveToCloud(); renderData();
+                    closeModal('modal-settings');
+                    showToast(`Backup restaurado (${n} lançamentos).`);
+                } catch (e) {
+                    showToast('Arquivo inválido. Use um backup baixado pelo app.', true);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function exportCsv() {
+            const txs = getAllTransactionsForCurrentMonth().slice().sort((a, b) => String(a.date).localeCompare(String(b.date)));
+            if (!txs.length) { showToast('Nenhum lançamento neste mês.', true); return; }
+            const catName = id => (appData.categories.find(c => c.id === id) || {}).name || 'Outros';
+            const who = u => u === 'user1' ? appData.settings.user1Name : u === 'user2' ? appData.settings.user2Name : 'Ambos';
+            // evita que o Excel interprete texto como fórmula
+            const cell = v => {
+                let t = String(v ?? '');
+                if (/^[=+\-@\t\r]/.test(t)) t = "'" + t;
+                return /[";\r\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t;
+            };
+            const rows = [['Data', 'Tipo', 'Descrição', 'Valor (R$)', 'Categoria', 'Responsável', 'Pagamento', 'Cartão', 'Parcela', 'Fixa', 'Situação']];
+            txs.forEach(t => {
+                const [y, m, d] = t.date.split('-');
+                const card = getCardForTx(t);
+                const situ = t.type === 'income' ? 'Recebida' : isTransactionDebited(t) ? 'Debitada' : (card ? 'Na fatura' : 'Pendente');
+                rows.push([`${d}/${m}/${y}`, t.type === 'income' ? 'Receita' : 'Despesa', t.desc, t.value.toFixed(2).replace('.', ','), catName(t.categoryId), who(t.userId), getPaymentLabel(t.payment), card ? card.name : '', t.installmentInfo || '', t.isFixed ? 'Sim' : 'Não', situ]);
+            });
+            const csv = '\ufeff' + rows.map(r => r.map((c, i) => i === 3 ? c : cell(c)).join(';')).join('\r\n');
+            downloadFile(`extrato-${currentViewDate.getFullYear()}-${String(currentViewDate.getMonth() + 1).padStart(2, '0')}.csv`, 'text/csv;charset=utf-8', csv);
+            showToast('Extrato exportado!');
+        }
+
+        // ================= EVOLUÇÃO MENSAL =================
+        const inViewFilter = t => { const vu = document.getElementById('view-user-filter').value; return vu === 'all' || t.userId === vu || t.userId === 'both'; };
+
+        function renderEvolution() {
+            const N = 6;
+            const end = new Date(currentViewDate.getFullYear(), currentViewDate.getMonth(), 1);
+            const buckets = [], idx = {};
+            for (let i = N - 1; i >= 0; i--) {
+                const d = new Date(end.getFullYear(), end.getMonth() - i, 1);
+                idx[monthKey(d)] = buckets.length;
+                buckets.push({ label: MONTHS_ABBR[d.getMonth()], inc: 0, exp: 0 });
+            }
+            const byCat = {};
+            alive(appData.transactions).forEach(t => {
+                if (!inViewFilter(t)) return;
+                const i = idx[monthKey(getEffectiveDate(t))];
+                if (i === undefined) return;
+                const v = shareValue(t);
+                if (t.type === 'income') { buckets[i].inc += v; return; }
+                buckets[i].exp += v;
+                if (i >= N - 2) {
+                    if (!byCat[t.categoryId]) byCat[t.categoryId] = [0, 0];
+                    byCat[t.categoryId][i - (N - 2)] += v;
+                }
+            });
+
+            if (charts.evolution) {
+                const ink = cssVar('--ink'), border = cssVar('--border');
+                const ch = charts.evolution;
+                ch.data.labels = buckets.map(b => b.label);
+                ch.data.datasets = [
+                    { type: 'bar', label: 'Receitas', data: buckets.map(b => b.inc), backgroundColor: '#CCFF00', borderColor: border, borderWidth: 2, borderRadius: 6, borderSkipped: false },
+                    { type: 'bar', label: 'Despesas', data: buckets.map(b => b.exp), backgroundColor: '#FF00FF', borderColor: border, borderWidth: 2, borderRadius: 6, borderSkipped: false },
+                    { type: 'line', label: 'Saldo do mês', data: buckets.map(b => b.inc - b.exp), borderColor: ink, backgroundColor: '#00F3FF', pointBackgroundColor: '#00F3FF', pointBorderColor: ink, pointBorderWidth: 2, pointRadius: 5, borderWidth: 3, tension: .25 }
+                ];
+                ch.options.scales.x.ticks = { color: ink, font: { size: 12 } };
+                ch.options.scales.y.ticks = { color: ink, font: { size: 11 }, display: !privacyMode, callback: v => new Intl.NumberFormat('pt-BR', { notation: 'compact', maximumFractionDigits: 1 }).format(v) };
+                ch.options.scales.y.grid = { color: border, lineWidth: 0.5 };
+                ch.options.plugins.legend.labels.color = ink;
+                ch.update();
+            }
+
+            const sr = document.getElementById('evo-sr');
+            if (sr) sr.textContent = privacyMode ? 'Valores ocultos.' : 'Últimos 6 meses. ' + buckets.map(b => `${b.label}: receitas ${formatCurrency(b.inc)}, despesas ${formatCurrency(b.exp)}`).join('; ') + '.';
+
+            // comparação por categoria: mês visto x mês anterior
+            const prevLabel = buckets[N - 2].label, curLabel = buckets[N - 1].label;
+            const rows = Object.entries(byCat).map(([id, [prev, cur]]) => ({ id, prev, cur, delta: cur - prev }))
+                .filter(r => r.prev > 0 || r.cur > 0)
+                .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta)).slice(0, 4);
+            const box = document.getElementById('evo-compare');
+            if (!box) return;
+            box.innerHTML = rows.length ? `<p class="cmp-title">Categorias: ${esc(prevLabel)} → ${esc(curLabel)}</p>` + rows.map(r => {
+                const cat = appData.categories.find(c => c.id === r.id);
+                const up = r.delta > 0.005, down = r.delta < -0.005;
+                const pct = r.prev > 0 ? ` (${r.delta > 0 ? '+' : ''}${Math.round((r.delta / r.prev) * 100)}%)` : '';
+                const chip = up ? `<span class="chip chip-magenta">▲ ${formatCurrency(r.delta)}${privacyMode ? '' : pct}</span>`
+                    : down ? `<span class="chip chip-lime">▼ ${formatCurrency(-r.delta)}${privacyMode ? '' : pct}</span>`
+                    : '<span class="chip">Igual</span>';
+                return `<div class="cmp-row"><div><b>${esc(cat ? cat.name : 'Outros')}</b><small>${formatCurrency(r.prev)} → ${formatCurrency(r.cur)}</small></div>${chip}</div>`;
+            }).join('') : '';
+        }
+
+        // ================= COMPROMISSOS FUTUROS =================
+        function computeCommitments() {
+            const now = new Date();
+            const start = new Date(now.getFullYear(), now.getMonth(), 1);
+            const months = [], idx = {};
+            for (let i = 0; i < 6; i++) {
+                const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
+                idx[monthKey(d)] = i;
+                months.push({ d, label: `${MONTHS_ABBR[d.getMonth()]}/${String(d.getFullYear()).slice(2)}`, parcelas: 0, fixas: 0 });
+            }
+            const groups = {};
+            alive(appData.transactions).forEach(t => {
+                if (t.type !== 'expense' || !t.installmentGroup || !inViewFilter(t) || isTransactionDebited(t)) return;
+                const eff = getEffectiveDate(t);
+                if (eff < start) return;
+                const v = shareValue(t);
+                const i = idx[monthKey(eff)];
+                if (i !== undefined) months[i].parcelas += v;
+                let g = groups[t.installmentGroup];
+                if (!g) g = groups[t.installmentGroup] = { desc: t.desc, card: getCardForTx(t), remaining: 0, count: 0, last: eff, next: eff, nextVal: v };
+                g.remaining += v; g.count++;
+                if (eff > g.last) g.last = eff;
+                if (eff < g.next) { g.next = eff; g.nextVal = v; }
+            });
+            const masters = alive(appData.transactions).filter(t => t.type === 'expense' && t.isFixed && !t.parentFixedId && t.date && inViewFilter(t));
+            masters.forEach(mt => {
+                const mk = mt.date.slice(0, 7), v = shareValue(mt);
+                months.forEach(m => { if (monthKey(m.d) >= mk) m.fixas += v; });
+            });
+            const list = Object.values(groups).sort((a, b) => a.last - b.last);
+            return {
+                months, groups: list, masters,
+                totalRemaining: list.reduce((a, g) => a + g.remaining, 0),
+                fixedPerMonth: masters.reduce((a, t) => a + shareValue(t), 0),
+                nextMonth: months[1].parcelas + months[1].fixas
+            };
+        }
+
+        function renderCommitmentsSummary() {
+            const box = document.getElementById('commit-summary');
+            if (!box) return;
+            const c = computeCommitments();
+            box.innerHTML = `
+                <div class="tile" style="--c:var(--purple)"><p>Parcelas restantes</p><p class="v">${formatCurrency(c.totalRemaining)}</p><span class="chip">${c.groups.length} parcelamento(s)</span></div>
+                <div class="tile" style="--c:var(--cyan)"><p>Próximo mês</p><p class="v">${formatCurrency(c.nextMonth)}</p><span class="chip">${MONTHS_ABBR[c.months[1].d.getMonth()]}</span></div>
+                <div class="tile" style="--c:var(--yellow)"><p>Fixas por mês</p><p class="v">${formatCurrency(c.fixedPerMonth)}</p><span class="chip">${c.masters.length} conta(s)</span></div>`;
+        }
+
+        function openCommitments() { renderCommitmentsBody(); openModal('modal-commitments'); }
+
+        function renderCommitmentsBody() {
+            const c = computeCommitments();
+            const max = Math.max(1, ...c.months.map(m => m.parcelas + m.fixas));
+            const rows = c.months.map(m => `
+                <div class="crow"><span class="crow-m">${esc(m.label)}</span>
+                    <div class="cbar" aria-hidden="true"><i aria-hidden="true" style="width:${(m.parcelas / max) * 100}%;background:var(--purple)"></i><i aria-hidden="true" style="width:${(m.fixas / max) * 100}%;background:var(--yellow)"></i></div>
+                    <span class="crow-v">${formatCurrency(m.parcelas + m.fixas)}</span></div>`).join('');
+            const groups = c.groups.length ? c.groups.map(g => `
+                <div class="manage-row"><div class="manage-main"><span class="manage-bar" style="background:${g.card ? safeColor(g.card.color) : '#BD00FF'}"></span>
+                    <div style="min-width:0"><p class="manage-name">${esc(g.desc)}</p>
+                    <p class="help">${g.count} parcela(s) • até ${MONTHS_ABBR[g.last.getMonth()]}/${g.last.getFullYear()}${g.card ? ' • ' + esc(g.card.name) : ''}</p></div></div>
+                    <div style="text-align:right;flex:none"><p style="font-weight:700">${formatCurrency(g.remaining)}</p><p class="help">${formatCurrency(g.nextVal)}/mês</p></div></div>`).join('')
+                : '<p class="help">Nenhum parcelamento em andamento.</p>';
+            const fixed = c.masters.length ? c.masters.map(t => `
+                <div class="manage-row"><div class="manage-main"><div style="min-width:0"><p class="manage-name">${esc(t.desc)}</p><p class="help">Todo dia ${Number(t.date.split('-')[2])}</p></div></div>
+                    <p style="font-weight:700;flex:none">${formatCurrency(shareValue(t))}</p></div>`).join('')
+                : '<p class="help">Nenhuma despesa fixa cadastrada.</p>';
+            document.getElementById('commitments-body').innerHTML = `
+                <section><div class="sub-title"><span>Próximos 6 meses</span><span class="chip-row"><span class="chip chip-purple">Parcelas</span><span class="chip chip-yellow">Fixas</span></span></div><div class="stack-sm">${rows}</div></section>
+                <section><div class="sub-title"><span>Parcelamentos em andamento</span></div><div class="stack-sm">${groups}</div></section>
+                <section><div class="sub-title"><span>Despesas fixas</span></div><div class="stack-sm">${fixed}</div></section>
+                <p class="help">Estimativa: considera parcelas ainda não pagas e despesas fixas pelo valor atual. Respeita o filtro de pessoa do topo.</p>`;
         }
 
         function generateId() { return Math.random().toString(36).substr(2, 9); }
@@ -1630,12 +1979,19 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             let y = parseInt(parts[0], 10);
             let m = parseInt(parts[1], 10) - 1;
             let d = parseInt(parts[2], 10);
-
-            // Lançamentos no cartão após o dia de vencimento vão para a fatura do mês seguinte
-            if (isCreditPayment(t.payment) && d > cardDueDay(t)) {
-                m += 1;
-            }
+            if (isCreditPayment(t.payment)) m += invoiceShift(t, d);
             return new Date(y, m, Math.min(d, 28));
+        }
+
+        // Quantos meses depois da compra a fatura vence (0 = no mesmo mês da compra)
+        function invoiceShift(t, day) {
+            const c = getCardForTx(t);
+            const due = (c && Number(c.dueDay)) || 10;
+            const close = c && Number(c.closingDay) >= 1 ? Number(c.closingDay) : null;
+            if (close === null) return day > due ? 1 : 0;   // cartão sem fechamento: o vencimento é o corte (como antes)
+            let shift = day > close ? 1 : 0;                // comprou depois do fechamento: vai para a próxima fatura
+            if (due <= close) shift += 1;                   // vencimento cai no mês seguinte ao fechamento
+            return shift;
         }
 
         function renderData() {
@@ -1686,6 +2042,8 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             if (activeView === 'view-dashboard') {
                 const cardData = renderCardsSummary();
                 updateCharts(catTotals, cardData);
+                renderEvolution();
+                renderCommitmentsSummary();
             }
             if (activeView === 'view-transactions') renderList(getFilteredTransactions());
             if (activeView === 'view-categories') renderCategories(catTotals);
@@ -1728,10 +2086,13 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 aliveCards().forEach(c => {
                     const due = Number(c.dueDay) || 10;
                     const dd = daysUntilDay(due);
-                    if (dd <= 5) {
-                        cardAlerts.push(`Fatura do ${c.name} vence dia ${due}`);
-                        closestDays = Math.min(closestDays, dd);
-                    }
+                    if (dd > 5) return;
+                    // fatura que vence na próxima ocorrência desse dia; só avisa se houver valor em aberto
+                    const target = new Date(now.getFullYear(), now.getMonth() + (due >= currentDay ? 0 : 1), 1);
+                    const inv = cardInvoice(c.id, target.getFullYear(), target.getMonth());
+                    if (inv.status === 'none' || inv.status === 'paid') return;
+                    cardAlerts.push(`Fatura do ${c.name} (${formatCurrency(inv.total - inv.paidTotal)}) vence dia ${due}`);
+                    closestDays = Math.min(closestDays, dd);
                 });
 
                 if (cardAlerts.length > 0) {
@@ -1819,8 +2180,11 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 : '';
 
             let cardNextMonthBadge = '';
-            if (isCard && parseInt(d, 10) > cardDueDay(t)) {
-                cardNextMonthBadge = `<span class="chip chip-cyan" title="Lançado na fatura do mês seguinte por ser após o vencimento"><i aria-hidden="true" class="fa-solid fa-calendar-plus"></i>Fatura próx. mês</span>`;
+            if (isCard) {
+                const eff = getEffectiveDate(t);
+                if (eff.getFullYear() !== Number(y) || eff.getMonth() !== Number(m) - 1) {
+                    cardNextMonthBadge = `<span class="chip chip-cyan" title="Esta compra entra na fatura que vence em ${MONTHS_ABBR[eff.getMonth()]}/${eff.getFullYear()}"><i aria-hidden="true" class="fa-solid fa-calendar-plus"></i>Fatura ${MONTHS_ABBR[eff.getMonth()]}</span>`;
+                }
             }
 
             let debitBadge = '';
@@ -1905,7 +2269,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 
         function initCharts() {
             if (typeof Chart === 'undefined') return; // CDN indisponível (ex.: primeiro acesso offline)
-            Chart.defaults.font.family = "'IBM Plex Sans', system-ui, sans-serif";
+            Chart.defaults.font.family = "'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace";
             Chart.defaults.font.weight = 600;
 
             const ctxCard = document.getElementById('chartCreditCard').getContext('2d');
@@ -1916,6 +2280,21 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                     responsive: true, maintainAspectRatio: false, indexAxis: 'y',
                     plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ' ' + formatCurrency(c.raw) } } },
                     scales: { x: { display: false }, y: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 12 } } } }
+                }
+            });
+
+            const ctxEvo = document.getElementById('chartEvolution').getContext('2d');
+            charts.evolution = new Chart(ctxEvo, {
+                type: 'bar',
+                data: { labels: [], datasets: [] },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 14, padding: 12, font: { size: 12 } } },
+                        tooltip: { callbacks: { label: c => ` ${c.dataset.label}: ${formatCurrency(c.raw)}` } }
+                    },
+                    scales: { x: { grid: { display: false } }, y: { border: { display: false } } }
                 }
             });
 
@@ -2118,6 +2497,9 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             const setTopbar = () => document.documentElement.style.setProperty('--topbar-h', hdr.offsetHeight + 'px');
             setTopbar();
             if ('ResizeObserver' in window) new ResizeObserver(setTopbar).observe(hdr); else window.addEventListener('resize', setTopbar);
+
+            try { privacyMode = localStorage.getItem('fin_privacy') === '1'; } catch (e) {}
+            applyPrivacy();
 
             initCharts();
             loadLocalData();
