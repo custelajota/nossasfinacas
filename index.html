@@ -23,20 +23,24 @@
 
     
 
+    <script>try{var __t=localStorage.getItem("fin_theme");if(__t)document.documentElement.setAttribute("data-theme",__t)}catch(e){}</script>
     <style>
 /* ===== Nossas Finanças — visual "neo-brutalista neon" (CSS puro, sem Tailwind) ===== */
-:root{
-  --ink:#0B0B0F; --on-neon:#0B0B0F; --paper:#FFFDF7; --paper-2:#F3EFE2; --muted:#4A4A55;
-  --bg:#FFD21F; --border:#0B0B0F; --shadow:#0B0B0F;
-  --cyan:#00F3FF; --magenta:#FF00FF; --purple:#BD00FF; --lime:#CCFF00; --yellow:#FFD21F;
-  --pos:#0A6B2B; --neg:#C2003D; --focus:#5B21B6;
-  --bw:2.5px; --r:16px;
-}
-.dark{
-  --ink:#F4F1EA; --paper:#1A1D2D; --paper-2:#12141F; --muted:#A9AEC4;
-  --bg:#0A0B12; --border:#F4F1EA; --shadow:#BD00FF;
-  --pos:#CCFF00; --neg:#FF6BF5; --focus:#00F3FF;
-}
+/* ---- temas de cores (só variáveis; o layout não muda) ---- */
+:root,[data-theme="neon"]{--ink:#0B0B0F;--on-neon:#0B0B0F;--paper:#FFFDF7;--paper-2:#F3EFE2;--muted:#4A4A55;--bg:#FFD21F;--border:#0B0B0F;--shadow:#0B0B0F;--cyan:#00F3FF;--magenta:#FF00FF;--purple:#C21FFF;--lime:#CCFF00;--yellow:#FFD21F;--pos:#0A6B2B;--neg:#C2003D;--focus:#5B21B6}
+.dark,.dark[data-theme="neon"],.dark [data-theme="neon"]{--ink:#F4F1EA;--on-neon:#0B0B0F;--paper:#1A1D2D;--paper-2:#12141F;--muted:#A9AEC4;--bg:#0A0B12;--border:#F4F1EA;--shadow:#BD00FF;--cyan:#00F3FF;--magenta:#FF00FF;--purple:#C21FFF;--lime:#CCFF00;--yellow:#FFD21F;--pos:#CCFF00;--neg:#FF6BF5;--focus:#00F3FF}
+[data-theme="mono"]{--ink:#000000;--on-neon:#000000;--paper:#FFFFFF;--paper-2:#EFEFEF;--muted:#444444;--bg:#D4D4D4;--border:#000000;--shadow:#000000;--cyan:#FFFFFF;--magenta:#9A9A9A;--purple:#BDBDBD;--lime:#DCDCDC;--yellow:#E9E9E9;--pos:#000000;--neg:#000000;--focus:#000000}
+.dark[data-theme="mono"],.dark [data-theme="mono"]{--ink:#FFFFFF;--on-neon:#000000;--paper:#141414;--paper-2:#0A0A0A;--muted:#B5B5B5;--bg:#000000;--border:#FFFFFF;--shadow:#6E6E6E;--cyan:#FFFFFF;--magenta:#9A9A9A;--purple:#BDBDBD;--lime:#DCDCDC;--yellow:#E9E9E9;--pos:#FFFFFF;--neg:#FFFFFF;--focus:#FFFFFF}
+[data-theme="suave"]{--ink:#14213D;--on-neon:#14213D;--paper:#FFFFFF;--paper-2:#EEF4FB;--muted:#4B5A78;--bg:#DCEAFB;--border:#14213D;--shadow:#14213D;--cyan:#A7D8FF;--magenta:#FFB3C7;--purple:#D3C4FF;--lime:#C7F0B2;--yellow:#FFE8A3;--pos:#146C43;--neg:#B3263E;--focus:#1D4ED8}
+.dark[data-theme="suave"],.dark [data-theme="suave"]{--ink:#E8EEFA;--on-neon:#14213D;--paper:#18233A;--paper-2:#111A2D;--muted:#A5B3CE;--bg:#0B1220;--border:#A7D8FF;--shadow:#35507F;--cyan:#A7D8FF;--magenta:#FFB3C7;--purple:#D3C4FF;--lime:#C7F0B2;--yellow:#FFE8A3;--pos:#C7F0B2;--neg:#FFB3C7;--focus:#A7D8FF}
+[data-theme="sobrio"]{--ink:#26231E;--on-neon:#26231E;--paper:#FBF9F4;--paper-2:#EFEBE1;--muted:#5A5448;--bg:#D8D2C4;--border:#26231E;--shadow:#26231E;--cyan:#9CC2BF;--magenta:#D39A7C;--purple:#B3A4B8;--lime:#C2CC99;--yellow:#E0C888;--pos:#3A6A2B;--neg:#9E3F26;--focus:#2F6361}
+.dark[data-theme="sobrio"],.dark [data-theme="sobrio"]{--ink:#EDE7DA;--on-neon:#26231E;--paper:#211E19;--paper-2:#171510;--muted:#B3AB9B;--bg:#12100D;--border:#C9C0AE;--shadow:#5C5547;--cyan:#9CC2BF;--magenta:#D39A7C;--purple:#B3A4B8;--lime:#C2CC99;--yellow:#E0C888;--pos:#C2CC99;--neg:#E9A98A;--focus:#9CC2BF}
+[data-theme="serio"]{--ink:#0F1B2D;--on-neon:#0F1B2D;--paper:#FFFFFF;--paper-2:#EDF1F6;--muted:#475569;--bg:#C5CFDC;--border:#0F1B2D;--shadow:#0F1B2D;--cyan:#9DBCE6;--magenta:#E3A0A0;--purple:#A9B2DE;--lime:#A9CDB4;--yellow:#E2C57F;--pos:#17633D;--neg:#A12C2C;--focus:#1E4F9A}
+.dark[data-theme="serio"],.dark [data-theme="serio"]{--ink:#E7EEF8;--on-neon:#0F1B2D;--paper:#111C2E;--paper-2:#0B1523;--muted:#9FB0C6;--bg:#060B14;--border:#9FB0C6;--shadow:#2B4A78;--cyan:#9DBCE6;--magenta:#E3A0A0;--purple:#A9B2DE;--lime:#A9CDB4;--yellow:#E2C57F;--pos:#A9CDB4;--neg:#F0A8A8;--focus:#9DBCE6}
+[data-theme="alegre"]{--ink:#2A1B3D;--on-neon:#2A1B3D;--paper:#FFFBF2;--paper-2:#FFEFD9;--muted:#5E4A74;--bg:#FFC8E0;--border:#2A1B3D;--shadow:#2A1B3D;--cyan:#6EE7F9;--magenta:#FF7DBE;--purple:#B79CFF;--lime:#B8F26A;--yellow:#FFE45C;--pos:#0F7A38;--neg:#C2185B;--focus:#6D28D9}
+.dark[data-theme="alegre"],.dark [data-theme="alegre"]{--ink:#FFF3E0;--on-neon:#2A1B3D;--paper:#2A1B45;--paper-2:#1E1233;--muted:#CDB9E6;--bg:#150B28;--border:#FFE9C2;--shadow:#FF7DBE;--cyan:#6EE7F9;--magenta:#FF7DBE;--purple:#B79CFF;--lime:#B8F26A;--yellow:#FFE45C;--pos:#B8F26A;--neg:#FF9ACB;--focus:#6EE7F9}
+[data-theme="floresta"]{--ink:#12261A;--on-neon:#12261A;--paper:#FBFEF9;--paper-2:#EAF3E6;--muted:#40574A;--bg:#CFE0CF;--border:#12261A;--shadow:#12261A;--cyan:#8FD3C4;--magenta:#E7A184;--purple:#C3ABD8;--lime:#BDE58A;--yellow:#F0D872;--pos:#1E6B33;--neg:#A8402A;--focus:#1F6B52}
+.dark[data-theme="floresta"],.dark [data-theme="floresta"]{--ink:#E4F2E6;--on-neon:#12261A;--paper:#12261B;--paper-2:#0B1A12;--muted:#A8C2B0;--bg:#06110A;--border:#A5C8AD;--shadow:#2F6B45;--cyan:#8FD3C4;--magenta:#E7A184;--purple:#C3ABD8;--lime:#BDE58A;--yellow:#F0D872;--pos:#BDE58A;--neg:#F0B09A;--focus:#8FD3C4}
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
 body{margin:0;min-height:100vh;display:flex;justify-content:center;font-family:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;font-size:14px;line-height:1.4;color:var(--ink);background:var(--bg);transition:background-color .3s}
@@ -155,10 +159,10 @@ button.chip:hover{transform:translate(-1px,-1px)}
 .input,.select{width:100%;padding:11px 14px;background:var(--paper);color:var(--ink);border:var(--bw) solid var(--border);border-radius:12px;box-shadow:3px 3px 0 var(--shadow);font-size:13px;font-weight:500;appearance:none;-webkit-appearance:none}
 .input::placeholder{color:var(--muted);opacity:.8}
 .input:focus,.select:focus{outline:3px solid var(--focus);outline-offset:2px}
-.select{padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5 7 7l5.5-5.5' fill='none' stroke='%230B0B0F' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center}
-.dark .select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5 7 7l5.5-5.5' fill='none' stroke='%23F4F1EA' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
-.select-neon{background-color:var(--lime);color:var(--on-neon);font-weight:700;width:auto;min-width:150px}
-.dark .select-neon{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1.5 1.5 7 7l5.5-5.5' fill='none' stroke='%230B0B0F' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.select{--chev:var(--ink);padding-right:38px;background-image:linear-gradient(45deg,transparent 50%,var(--chev) 50%),linear-gradient(135deg,var(--chev) 50%,transparent 50%);background-position:calc(100% - 20px) 52%,calc(100% - 14px) 52%;background-size:6px 6px,6px 6px;background-repeat:no-repeat}
+
+.select-neon{--chev:var(--on-neon);background-color:var(--lime);color:var(--on-neon);font-weight:700;width:auto;min-width:150px}
+
 .form{display:flex;flex-direction:column;gap:16px}
 .field label,.label{display:block;margin:0 0 7px 2px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -171,7 +175,7 @@ button.chip:hover{transform:translate(-1px,-1px)}
 .switch{appearance:none;-webkit-appearance:none;position:relative;flex:none;width:48px;height:27px;margin:0;background:var(--paper-2);border:var(--bw) solid var(--border);border-radius:999px;cursor:pointer;transition:background .15s}
 .switch::after{content:'';position:absolute;top:3px;left:3px;width:15px;height:15px;border-radius:50%;background:var(--border);transition:transform .15s}
 .switch:checked{background:var(--lime)}
-.switch:checked::after{transform:translateX(21px);background:#0B0B0F}
+.switch:checked::after{transform:translateX(21px);background:var(--on-neon)}
 .switch:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 .check-row{display:flex;align-items:center;gap:14px;padding:12px 14px;background:var(--paper-2);border:var(--bw) solid var(--border);border-radius:12px}
 .check-row label{display:block;font-weight:700;font-size:13px;cursor:pointer}
@@ -340,6 +344,21 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 .cbar > i{display:block;height:100%}
 .sub-title{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
 .stack-sm{display:flex;flex-direction:column;gap:10px}
+
+/* ---- seletor de temas ---- */
+.theme-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:8px 0 6px}
+.theme-opt{position:relative;display:flex;flex-direction:column;gap:5px;text-align:left;padding:10px;background:var(--paper);color:var(--ink);border:var(--bw) solid var(--border);border-radius:14px;box-shadow:3px 3px 0 var(--shadow);transition:transform .08s,box-shadow .08s}
+.theme-opt:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--shadow)}
+.theme-opt[aria-checked="true"]{background:var(--paper-2);transform:translate(3px,3px);box-shadow:none}
+.theme-opt[aria-checked="false"] .theme-check{display:none}
+.theme-check{position:absolute;top:8px;right:9px;font-size:15px}
+.theme-prev{display:flex;align-items:center;gap:5px;padding:8px;background:var(--bg);border:2px solid var(--border);border-radius:10px;color:var(--ink)}
+.theme-prev .tp-paper{width:22px;height:22px;background:var(--paper);border:2px solid var(--border);border-radius:6px}
+.theme-prev i{display:block;width:14px;height:22px;border:2px solid var(--border);border-radius:5px}
+.theme-name{font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.02em}
+.theme-desc{font-size:11px;color:var(--muted);line-height:1.25}
+.seg-mode{background:var(--paper)}
+.seg input:checked + .seg-mode{background:var(--yellow);color:var(--on-neon);transform:translate(3px,3px);box-shadow:none}
 
     </style>
 </head>
@@ -706,6 +725,18 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                     <button onclick="closeModal('modal-settings')" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="form">
+                    <fieldset class="field">
+                        <legend>Tema de cores</legend>
+                        <div id="theme-picker" class="theme-grid" role="radiogroup" aria-label="Tema de cores"></div>
+                        <span class="help">Muda só as cores; o layout continua igual. A escolha vale para este aparelho.</span>
+                    </fieldset>
+                    <fieldset class="field">
+                        <legend>Modo</legend>
+                        <div class="seg" role="radiogroup" aria-label="Modo claro ou escuro" style="margin-top:8px">
+                            <label><input type="radio" name="uiMode" value="light" class="sr-only" onchange="setDarkMode(false)"><span class="seg-item seg-mode"><i aria-hidden="true" class="fa-solid fa-sun"></i> Claro</span></label>
+                            <label><input type="radio" name="uiMode" value="dark" class="sr-only" onchange="setDarkMode(true)"><span class="seg-item seg-mode"><i aria-hidden="true" class="fa-solid fa-moon"></i> Escuro</span></label>
+                        </div>
+                    </fieldset>
                     <div class="field"><label for="set-script-url">Planilha do Google (URL Apps Script)</label><input type="text" id="set-script-url" class="input" placeholder="https://script.google.com/..."></div>
                     <div class="field"><label for="set-script-token">Senha de sincronização (opcional)</label><input type="password" id="set-script-token" class="input" autocomplete="off" placeholder="Igual à propriedade TOKEN do Apps Script"></div>
                     <div class="row2">
@@ -929,7 +960,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 const themeText = document.getElementById('theme-text-sb');
                 if (themeText) themeText.textContent = "Modo Escuro";
             }
-            document.querySelector('meta[name="theme-color"]')?.setAttribute('content', document.documentElement.classList.contains('dark') ? '#0A0B12' : '#FFD21F');
+            syncThemeColor(); syncModeRadios();
             updateChartTheme();
         }
 
@@ -1542,9 +1573,9 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 const ch = charts.evolution;
                 ch.data.labels = buckets.map(b => b.label);
                 ch.data.datasets = [
-                    { type: 'bar', label: 'Receitas', data: buckets.map(b => b.inc), backgroundColor: '#CCFF00', borderColor: border, borderWidth: 2, borderRadius: 6, borderSkipped: false },
-                    { type: 'bar', label: 'Despesas', data: buckets.map(b => b.exp), backgroundColor: '#FF00FF', borderColor: border, borderWidth: 2, borderRadius: 6, borderSkipped: false },
-                    { type: 'line', label: 'Saldo do mês', data: buckets.map(b => b.inc - b.exp), borderColor: ink, backgroundColor: '#00F3FF', pointBackgroundColor: '#00F3FF', pointBorderColor: ink, pointBorderWidth: 2, pointRadius: 5, borderWidth: 3, tension: .25 }
+                    { type: 'bar', label: 'Receitas', data: buckets.map(b => b.inc), backgroundColor: cssVar('--lime'), borderColor: border, borderWidth: 2, borderRadius: 6, borderSkipped: false },
+                    { type: 'bar', label: 'Despesas', data: buckets.map(b => b.exp), backgroundColor: cssVar('--magenta'), borderColor: border, borderWidth: 2, borderRadius: 6, borderSkipped: false },
+                    { type: 'line', label: 'Saldo do mês', data: buckets.map(b => b.inc - b.exp), borderColor: ink, backgroundColor: cssVar('--cyan'), pointBackgroundColor: cssVar('--cyan'), pointBorderColor: ink, pointBorderWidth: 2, pointRadius: 5, borderWidth: 3, tension: .25 }
                 ];
                 ch.options.scales.x.ticks = { color: ink, font: { size: 12 } };
                 ch.options.scales.y.ticks = { color: ink, font: { size: 11 }, display: !privacyMode, callback: v => new Intl.NumberFormat('pt-BR', { notation: 'compact', maximumFractionDigits: 1 }).format(v) };
@@ -1647,6 +1678,46 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 <section><div class="sub-title"><span>Despesas fixas</span></div><div class="stack-sm">${fixed}</div></section>
                 <p class="help">Estimativa: considera parcelas ainda não pagas e despesas fixas pelo valor atual. Respeita o filtro de pessoa do topo.</p>`;
         }
+
+        // ================= TEMAS DE CORES =================
+        const THEMES = [{"id": "neon", "name": "Neon", "desc": "Vibrante, o visual original"}, {"id": "mono", "name": "Preto e branco", "desc": "Alto contraste, sem cores"}, {"id": "suave", "name": "Claro suave", "desc": "Pastéis leves de azul e menta"}, {"id": "sobrio", "name": "Sóbrio", "desc": "Tons terrosos e neutros"}, {"id": "serio", "name": "Sério", "desc": "Azul-marinho e cinza, formal"}, {"id": "alegre", "name": "Alegre", "desc": "Pastéis coloridos e divertidos"}, {"id": "floresta", "name": "Floresta", "desc": "Verdes naturais e calmos"}];
+        const currentTheme = () => { const a = document.documentElement.getAttribute('data-theme'); return THEMES.some(t => t.id === a) ? a : 'neon'; };
+
+        function syncThemeColor() {
+            const bg = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim();
+            if (bg) document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg);
+        }
+        function syncModeRadios() {
+            const dark = document.documentElement.classList.contains('dark');
+            document.querySelectorAll('input[name="uiMode"]').forEach(r => { r.checked = (r.value === 'dark') === dark; });
+        }
+        function setDarkMode(on) { if (!!appData.settings.darkMode !== !!on) toggleDarkMode(); }
+
+        function renderThemePicker() {
+            const box = document.getElementById('theme-picker');
+            if (!box) return;
+            if (!box.children.length) {
+                box.innerHTML = THEMES.map(t => `
+                    <button type="button" class="theme-opt" role="radio" aria-checked="false" data-theme-id="${t.id}" onclick="setTheme('${t.id}')">
+                        <span class="theme-prev" data-theme="${t.id}" aria-hidden="true"><b class="tp-paper"></b><i aria-hidden="true" style="background:var(--cyan)"></i><i aria-hidden="true" style="background:var(--magenta)"></i><i aria-hidden="true" style="background:var(--lime)"></i><i aria-hidden="true" style="background:var(--purple)"></i></span>
+                        <span class="theme-name">${t.name}</span>
+                        <span class="theme-desc">${t.desc}</span>
+                        <i aria-hidden="true" class="fa-solid fa-circle-check theme-check"></i>
+                    </button>`).join('');
+            }
+            const cur = currentTheme();
+            box.querySelectorAll('.theme-opt').forEach(b => b.setAttribute('aria-checked', String(b.dataset.themeId === cur)));
+        }
+
+        function setTheme(id) {
+            const t = THEMES.find(x => x.id === id);
+            if (!t) return;
+            document.documentElement.setAttribute('data-theme', id);
+            try { localStorage.setItem('fin_theme', id); } catch (e) {}
+            syncThemeColor(); renderThemePicker(); renderData();
+        }
+
+        const chartPalette = () => ['--cyan', '--magenta', '--lime', '--purple', '--yellow', '--focus'].map(cssVar);
 
         function generateId() { return Math.random().toString(36).substr(2, 9); }
 
@@ -1950,6 +2021,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             document.getElementById('set-user1').value = appData.settings.user1Name || 'Pessoa A';
             document.getElementById('set-user2').value = appData.settings.user2Name || 'Pessoa B';
             document.getElementById('set-enable-rollover').checked = appData.settings.enableRollover;
+            renderThemePicker(); syncModeRadios();
             openModal('modal-settings');
         }
 
@@ -2265,7 +2337,6 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
         }
 
         const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-        const NEON_PALETTE = ['#00F3FF', '#FF00FF', '#CCFF00', '#BD00FF', '#FFD21F', '#3b82f6'];
 
         function initCharts() {
             if (typeof Chart === 'undefined') return; // CDN indisponível (ex.: primeiro acesso offline)
@@ -2344,7 +2415,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             charts.categories.options.plugins.legend.labels.color = ink;
             charts.categories.data.labels = labels;
             charts.categories.data.datasets = [{
-                data, backgroundColor: NEON_PALETTE, borderWidth: 2.5, borderColor: border
+                data, backgroundColor: chartPalette(), borderWidth: 2.5, borderColor: border
             }];
             charts.categories.update();
         }
