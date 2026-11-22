@@ -360,6 +360,21 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 .seg-mode{background:var(--paper)}
 .seg input:checked + .seg-mode{background:var(--yellow);color:var(--on-neon);transform:translate(3px,3px);box-shadow:none}
 
+/* ---- avisos com botão de fechar, escolhas de parcelas ---- */
+.notice-x,.toast-x{flex:none;width:32px;height:32px;display:grid;place-items:center;background:var(--paper);color:var(--ink);border:2px solid var(--border);border-radius:10px;font-size:14px}
+.notice-x:hover,.toast-x:hover{background:var(--ink);color:var(--paper)}
+.notice-side{display:flex;align-items:center;gap:8px;flex:none}
+.toast{pointer-events:auto}
+.toast span{flex:1}
+.scope-list{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.scope-opt{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--paper);border:var(--bw) solid var(--border);border-radius:12px;cursor:pointer;font-size:13px}
+.scope-opt input{margin-top:3px;width:18px;height:18px;accent-color:var(--ink);flex:none}
+.scope-opt b{display:block;font-weight:700}
+.scope-opt small{display:block;font-size:11px;color:var(--muted);margin-top:1px}
+.scope-opt:has(input:checked){background:var(--yellow);color:var(--on-neon)}
+.scope-opt:has(input:checked) small{color:var(--on-neon);opacity:.8}
+.scope-opt:has(input:focus-visible){outline:3px solid var(--focus);outline-offset:2px}
+
     </style>
 </head>
 <body>
@@ -417,7 +432,6 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 <button class="btn btn-block" onclick="openTransactionModal()" title="Novo Lançamento" aria-label="Novo Lançamento"><i aria-hidden="true" class="fa-solid fa-plus"></i><span class="sidebar-label">Novo Lançamento</span></button>
                 <div class="nav-divider"></div>
                 <button id="btn-privacy-sb" class="nav-item" onclick="togglePrivacy()" aria-pressed="false" title="Ocultar valores" aria-label="Ocultar valores"><i aria-hidden="true" id="privacy-icon-sb" class="fa-solid fa-eye"></i><span id="privacy-text-sb" class="sidebar-label">Ocultar valores</span></button>
-                <button class="nav-item" onclick="toggleDarkMode()" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro"><i aria-hidden="true" id="theme-icon-sb" class="fa-solid fa-sun"></i><span id="theme-text-sb" class="sidebar-label">Tema</span></button>
                 <button id="btn-sync-sb" class="nav-item" onclick="syncDataFromCloud()" title="Sincronizar" aria-label="Sincronizar"><i aria-hidden="true" class="fa-solid fa-arrows-rotate"></i><span class="sidebar-label">Sincronizar</span></button>
                 <button class="nav-item" onclick="openSettings()" title="Configurações" aria-label="Configurações"><i aria-hidden="true" class="fa-solid fa-gear"></i><span class="sidebar-label">Configurações</span></button>
             </div>
@@ -429,7 +443,6 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                     <h1 class="page-title">Nossas <span class="hl">Finanças</span></h1>
                     <div class="mobile-actions">
                         <button id="btn-privacy-mb" class="icon-btn" onclick="togglePrivacy()" aria-pressed="false" title="Ocultar valores" aria-label="Ocultar valores"><i aria-hidden="true" id="privacy-icon-mb" class="fa-solid fa-eye"></i></button>
-                        <button class="icon-btn" onclick="toggleDarkMode()" title="Alternar tema" aria-label="Alternar tema"><i aria-hidden="true" id="theme-icon-mb" class="fa-solid fa-sun"></i></button>
                         <button id="btn-sync-mb" class="icon-btn" onclick="syncDataFromCloud()" title="Sincronizar" aria-label="Sincronizar"><i aria-hidden="true" class="fa-solid fa-arrows-rotate"></i></button>
                         <button class="icon-btn" onclick="openSettings()" title="Configurações" aria-label="Configurações"><i aria-hidden="true" class="fa-solid fa-gear"></i></button>
                     </div>
@@ -457,7 +470,10 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                             <span class="ico ico-paper"><i aria-hidden="true" class="fa-solid fa-triangle-exclamation"></i></span>
                             <div><strong>Atenção: teto de categoria excedido!</strong><p id="dash-budget-alert-msg"></p></div>
                         </div>
-                        <button class="btn btn-sm btn-paper" onclick="switchView('categories')">Ver</button>
+                        <div class="notice-side">
+                            <button class="btn btn-sm btn-paper" onclick="switchView('categories')">Ver</button>
+                            <button class="notice-x" onclick="dismissNotice('dash-budget-alert')" aria-label="Fechar aviso" title="Fechar aviso"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                        </div>
                     </div>
                     <div class="reminders">
                         <div id="card-due-reminder" class="notice notice-yellow hidden">
@@ -465,14 +481,20 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                                 <span class="ico ico-paper"><i aria-hidden="true" class="fa-solid fa-credit-card"></i></span>
                                 <div><strong>Próximo vencimento de cartão</strong><p id="card-due-reminder-text"></p></div>
                             </div>
-                            <span id="card-due-badge" class="chip"></span>
+                            <div class="notice-side">
+                                <span id="card-due-badge" class="chip"></span>
+                                <button class="notice-x" onclick="dismissNotice('card-due-reminder')" aria-label="Fechar aviso" title="Fechar aviso"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                            </div>
                         </div>
                         <div id="fixed-bills-reminder" class="notice notice-cyan hidden">
                             <div class="notice-main">
                                 <span class="ico ico-paper"><i aria-hidden="true" class="fa-solid fa-bell"></i></span>
                                 <div><strong>Lembrete de contas fixas</strong><p id="fixed-bills-reminder-text"></p></div>
                             </div>
-                            <button class="btn btn-sm btn-paper" onclick="switchView('transactions')">Ver</button>
+                            <div class="notice-side">
+                                <button class="btn btn-sm btn-paper" onclick="switchView('transactions')">Ver</button>
+                                <button class="notice-x" onclick="dismissNotice('fixed-bills-reminder')" aria-label="Fechar aviso" title="Fechar aviso"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                            </div>
                         </div>
                     </div>
 
@@ -646,7 +668,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                         <label><input type="radio" name="txType" value="expense" class="sr-only" checked onchange="toggleInstallments()"><span class="seg-item seg-expense">Despesa</span></label>
                         <label><input type="radio" name="txType" value="income" class="sr-only" onchange="toggleInstallments()"><span class="seg-item seg-income">Receita</span></label>
                     </div>
-                    <div class="field"><label for="txValue">Valor</label><div class="money"><span>R$</span><input type="number" id="txValue" class="input" step="0.01" min="0.01" required placeholder="0.00"></div></div>
+                    <div class="field"><label for="txValue" id="lbl-txValue">Valor</label><div class="money"><span>R$</span><input type="number" id="txValue" class="input" step="0.01" min="0.01" required placeholder="0.00" oninput="onValueInput()"></div></div>
                     <div class="field"><label for="txDesc">Descrição</label><input type="text" id="txDesc" class="input" required placeholder="Ex: Supermercado, Aluguel..."></div>
                     <div class="row2">
                         <div class="field"><label for="txDate">Data</label><input type="date" id="txDate" class="input" required></div>
@@ -671,7 +693,15 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                         <div style="display:flex;justify-content:space-between;align-items:center"><label for="txCard" style="margin-bottom:7px">Cartão</label><button type="button" class="link-btn" onclick="openCardsModal()">Gerenciar cartões</button></div>
                         <select id="txCard" class="select"></select>
                     </div>
-                    <div id="installments-container" class="field hidden"><label for="txInstallments">Qtd. parcelas</label><input type="number" id="txInstallments" class="input" min="2" max="48" value="2"></div>
+                    <div id="installments-container" class="field hidden"><label for="txInstallments">Qtd. parcelas</label><input type="number" id="txInstallments" class="input" min="2" max="48" value="2" oninput="updateInstHelper()"><span id="inst-helper" class="help" aria-live="polite"></span></div>
+                    <fieldset id="scope-container" class="field hidden">
+                        <legend>Aplicar alterações em</legend>
+                        <div class="scope-list" role="radiogroup" aria-label="Aplicar alterações em">
+                            <label class="scope-opt"><input type="radio" name="txScope" value="all" checked onchange="onScopeChange()"><span><b>Todas as parcelas</b><small>Muda valor, parcelas, datas e dados de todos os meses</small></span></label>
+                            <label class="scope-opt"><input type="radio" name="txScope" value="following" onchange="onScopeChange()"><span><b>Esta e as próximas</b><small>Mantém as parcelas anteriores como estão</small></span></label>
+                            <label class="scope-opt"><input type="radio" name="txScope" value="one" onchange="onScopeChange()"><span><b>Somente esta parcela</b></span></label>
+                        </div>
+                    </fieldset>
                     <div id="fixed-container" class="check-row">
                         <input type="checkbox" id="txFixed" class="switch">
                         <div><label for="txFixed">Despesa fixa recorrente</label><span class="help">Será debitada do saldo somente na data do pagamento</span></div>
@@ -725,11 +755,10 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                     <button onclick="closeModal('modal-settings')" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div class="form">
-                    <fieldset class="field">
-                        <legend>Tema de cores</legend>
-                        <div id="theme-picker" class="theme-grid" role="radiogroup" aria-label="Tema de cores"></div>
-                        <span class="help">Muda só as cores; o layout continua igual. A escolha vale para este aparelho.</span>
-                    </fieldset>
+                    <button type="button" class="link-row" onclick="openThemes()">
+                        <span><strong><i aria-hidden="true" class="fa-solid fa-palette"></i> Tema de cores</strong><span class="help" id="theme-current-label">Neon</span></span>
+                        <i aria-hidden="true" class="fa-solid fa-chevron-right"></i>
+                    </button>
                     <fieldset class="field">
                         <legend>Modo</legend>
                         <div class="seg" role="radiogroup" aria-label="Modo claro ou escuro" style="margin-top:8px">
@@ -737,13 +766,13 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                             <label><input type="radio" name="uiMode" value="dark" class="sr-only" onchange="setDarkMode(true)"><span class="seg-item seg-mode"><i aria-hidden="true" class="fa-solid fa-moon"></i> Escuro</span></label>
                         </div>
                     </fieldset>
-                    <div class="field"><label for="set-script-url">Planilha do Google (URL Apps Script)</label><input type="text" id="set-script-url" class="input" placeholder="https://script.google.com/..."></div>
-                    <div class="field"><label for="set-script-token">Senha de sincronização (opcional)</label><input type="password" id="set-script-token" class="input" autocomplete="off" placeholder="Igual à propriedade TOKEN do Apps Script"></div>
+                    <div class="field"><label for="set-script-url">Planilha do Google (URL do Apps Script)</label><input type="text" id="set-script-url" class="input" placeholder="https://script.google.com/..."></div>
+                    <div class="field"><label for="set-script-token">Senha de sincronização</label><input type="password" id="set-script-token" class="input" autocomplete="off" placeholder="A senha gerada na planilha"></div>
                     <div class="row2">
                         <div class="field"><label for="set-user1">Nome pessoa A</label><input type="text" id="set-user1" class="input"></div>
                         <div class="field"><label for="set-user2">Nome pessoa B</label><input type="text" id="set-user2" class="input"></div>
                     </div>
-                    <button type="button" onclick="closeModal('modal-settings'); openCardsModal()" class="link-row">
+                    <button type="button" onclick="openCardsModal()" class="link-row">
                         <span><strong><i aria-hidden="true" class="fa-solid fa-credit-card"></i> Cartões de crédito</strong><span class="help">Adicionar, editar e definir o dia de vencimento</span></span>
                         <i aria-hidden="true" class="fa-solid fa-chevron-right"></i>
                     </button>
@@ -763,6 +792,18 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                     </div>
                     <button onclick="saveSettings()" class="btn btn-block">Salvar configurações</button>
                 </div>
+            </div>
+        </div>
+
+        <!-- ===== MODAL TEMAS ===== -->
+        <div id="modal-themes" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-themes-title">
+            <div class="modal-content">
+                <div class="sheet-head">
+                    <h2 id="modal-themes-title">Tema de cores</h2>
+                    <button onclick="closeModal('modal-themes')" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="theme-picker" class="theme-grid" role="radiogroup" aria-label="Tema de cores"></div>
+                <p class="help">Muda só as cores; o layout continua igual. A escolha vale para este aparelho.</p>
             </div>
         </div>
 
@@ -815,6 +856,18 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             </div>
         </div>
 
+
+        <!-- ===== MODAL ESCOLHA ===== -->
+        <div id="modal-choice" class="modal" role="dialog" aria-modal="true" aria-labelledby="choice-title">
+            <div class="modal-content">
+                <div class="sheet-head">
+                    <h2 id="choice-title">Excluir</h2>
+                    <button onclick="resolveChoice(-1)" aria-label="Fechar" class="icon-btn icon-btn-sm"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>
+                </div>
+                <p id="choice-msg" style="margin-bottom:16px"></p>
+                <div id="choice-buttons" class="stack-sm"></div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -895,10 +948,12 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
             toast.className = 'toast' + (isError ? ' toast-error' : '');
-            toast.innerHTML = `<i aria-hidden="true" class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> <span>${msg}</span>`;
+            toast.innerHTML = `<i aria-hidden="true" class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> <span>${msg}</span><button type="button" class="toast-x" aria-label="Fechar aviso" title="Fechar aviso"><i aria-hidden="true" class="fa-solid fa-xmark"></i></button>`;
+            const close = () => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); };
+            toast.querySelector('.toast-x').addEventListener('click', close);
             container.appendChild(toast);
             requestAnimationFrame(() => toast.classList.add('show'));
-            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); }, 3000);
+            setTimeout(close, isError ? 5000 : 3000);
         }
 
         function toggleSidebar() {
@@ -971,7 +1026,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             saveToCloud();
         }
 
-        function switchView(viewId) {
+        function switchView(viewId, fromNav) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn, .sidebar-nav-btn').forEach(btn => {
                 const on = btn.dataset.target === viewId;
@@ -980,6 +1035,14 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             });
             const targetView = document.getElementById(`view-${viewId}`);
             if (targetView) targetView.classList.add('active');
+
+            // histórico: sair da tela inicial cria uma entrada; voltar à inicial desfaz; entre as outras só troca
+            if (!fromNav && viewId !== currentView) {
+                if (currentView === 'dashboard') navPush({ view: viewId });
+                else if (viewId === 'dashboard') navBack();
+                else { try { history.replaceState({ view: viewId }, ''); } catch (e) {} }
+            }
+            currentView = viewId;
             renderData();
         }
 
@@ -1178,6 +1241,34 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 
         // ---------- Modais acessíveis: foco, Esc e Tab preso dentro do modal ----------
         const modalFocusStack = [];
+        // ---------- Histórico: o botão "voltar" fecha modais e volta de tela (em vez de sair do app) ----------
+        let currentView = 'dashboard';
+        let navLock = false, navTimer = null;
+        const navQueue = [];
+        const modalHist = [];   // modais abertos que têm uma entrada no histórico
+        function navFlush() {
+            navLock = false; clearTimeout(navTimer);
+            while (navQueue.length) { try { history.pushState(navQueue.shift(), ''); } catch (err) {} }
+        }
+        function navPush(state) {
+            if (navLock) { navQueue.push(state); return; }
+            try { history.pushState(state, ''); } catch (e) {}
+        }
+        function navBack() {
+            navLock = true;
+            clearTimeout(navTimer);
+            navTimer = setTimeout(navFlush, 700);   // segurança: se o evento não vier, destrava
+            try { history.back(); } catch (e) { navFlush(); }
+        }
+        window.addEventListener('popstate', e => {
+            if (navLock) { navFlush(); return; }     // foi um navBack() nosso: a tela já está certa
+            const open = [...document.querySelectorAll('.modal.active')].pop();
+            if (open) { closeModal(open.id, true); return; }
+            const v = (e.state && e.state.view) || 'dashboard';
+            if (v !== currentView) switchView(v, true);
+        });
+
+        let choiceResolve = null;
         function openModal(id) {
             const m = document.getElementById(id);
             if (!m) return;
@@ -1185,8 +1276,9 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             m.classList.add('active');
             const box = m.querySelector('.modal-content');
             if (box) { box.setAttribute('tabindex', '-1'); box.focus({ preventScroll: true }); }
+            if (!modalHist.includes(id)) { modalHist.push(id); navPush({ modal: id }); }
         }
-        function closeModal(id) {
+        function closeModal(id, fromPop) {
             const m = document.getElementById(id);
             if (!m) return;
             m.classList.remove('active');
@@ -1195,7 +1287,29 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 const { el } = modalFocusStack.splice(i, 1)[0];
                 if (el && el.focus && document.contains(el)) el.focus({ preventScroll: true });
             }
+            if (id === 'modal-choice' && choiceResolve) { const r = choiceResolve; choiceResolve = null; r(-1); }
+            const hi = modalHist.lastIndexOf(id);
+            if (hi >= 0) { modalHist.splice(hi, 1); if (!fromPop) navBack(); }
         }
+
+        // Pergunta com várias opções (usada para excluir parcelas)
+        function askChoice(title, message, options) {
+            return new Promise(resolve => {
+                document.getElementById('choice-title').textContent = title;
+                document.getElementById('choice-msg').textContent = message;
+                document.getElementById('choice-buttons').innerHTML = options.map((o, i) =>
+                    `<button type="button" class="btn ${o.cls || 'btn-paper'} btn-block" onclick="resolveChoice(${i})">${esc(o.label)}</button>`).join('')
+                    + '<button type="button" class="btn btn-paper btn-block" onclick="resolveChoice(-1)">Cancelar</button>';
+                choiceResolve = resolve;
+                openModal('modal-choice');
+            });
+        }
+        function resolveChoice(i) {
+            const r = choiceResolve; choiceResolve = null;
+            closeModal('modal-choice');
+            if (r) r(i);
+        }
+
         document.addEventListener('keydown', e => {
             const open = [...document.querySelectorAll('.modal.active')].pop();
             if (!open) return;
@@ -1679,6 +1793,27 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                 <p class="help">Estimativa: considera parcelas ainda não pagas e despesas fixas pelo valor atual. Respeita o filtro de pessoa do topo.</p>`;
         }
 
+        // ================= AVISOS DISPENSÁVEIS =================
+        const NOTICE_IDS = ['dash-budget-alert', 'card-due-reminder', 'fixed-bills-reminder'];
+        const noticeSig = id => { const el = document.getElementById(id); return el ? el.innerText.replace(/\s+/g, ' ').trim() : ''; };
+        function readDismissed() { try { return JSON.parse(localStorage.getItem('fin_dismissed') || '{}') || {}; } catch (e) { return {}; } }
+        function dismissNotice(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            const store = readDismissed();
+            store[id] = todayStr() + '|' + noticeSig(id);
+            try { localStorage.setItem('fin_dismissed', JSON.stringify(store)); } catch (e) {}
+            el.classList.add('hidden');
+        }
+        // Aviso fechado só volta se o conteúdo mudar ou no dia seguinte
+        function applyNoticeDismissals() {
+            const store = readDismissed();
+            NOTICE_IDS.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && !el.classList.contains('hidden') && store[id] === todayStr() + '|' + noticeSig(id)) el.classList.add('hidden');
+            });
+        }
+
         // ================= TEMAS DE CORES =================
         const THEMES = [{"id": "neon", "name": "Neon", "desc": "Vibrante, o visual original"}, {"id": "mono", "name": "Preto e branco", "desc": "Alto contraste, sem cores"}, {"id": "suave", "name": "Claro suave", "desc": "Pastéis leves de azul e menta"}, {"id": "sobrio", "name": "Sóbrio", "desc": "Tons terrosos e neutros"}, {"id": "serio", "name": "Sério", "desc": "Azul-marinho e cinza, formal"}, {"id": "alegre", "name": "Alegre", "desc": "Pastéis coloridos e divertidos"}, {"id": "floresta", "name": "Floresta", "desc": "Verdes naturais e calmos"}];
         const currentTheme = () => { const a = document.documentElement.getAttribute('data-theme'); return THEMES.some(t => t.id === a) ? a : 'neon'; };
@@ -1714,10 +1849,133 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             if (!t) return;
             document.documentElement.setAttribute('data-theme', id);
             try { localStorage.setItem('fin_theme', id); } catch (e) {}
-            syncThemeColor(); renderThemePicker(); renderData();
+            syncThemeColor(); renderThemePicker(); updateThemeLabel(); renderData();
         }
 
+        function updateThemeLabel() {
+            const el = document.getElementById('theme-current-label');
+            const t = THEMES.find(x => x.id === currentTheme());
+            if (el && t) el.textContent = `${t.name} — ${t.desc}`;
+        }
+        function openThemes() { renderThemePicker(); openModal('modal-themes'); }
+
         const chartPalette = () => ['--cyan', '--magenta', '--lime', '--purple', '--yellow', '--focus'].map(cssVar);
+
+        // ================= PARCELAS =================
+        let editingGroup = null;   // parcelamento em edição: { gid, members, k, n, total, thisValue }
+        const instIdx = t => parseInt(String(t.installmentInfo || '').split('/')[0], 10) || 0;
+        const instTotalN = t => parseInt(String(t.installmentInfo || '').split('/')[1], 10) || 0;
+        const fmtYMD = dt => `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
+        // soma meses sem estourar o dia (31 em mês curto vira o último dia do mês)
+        function addMonthsClamped(y, m1, d, add) {
+            const dim = new Date(y, m1 - 1 + add + 1, 0).getDate();
+            return fmtYMD(new Date(y, m1 - 1 + add, Math.min(d, dim)));
+        }
+        function groupMembers(gid) {
+            return alive(appData.transactions).filter(t => t.installmentGroup === gid)
+                .sort((a, b) => instIdx(a) - instIdx(b) || String(a.date).localeCompare(String(b.date)));
+        }
+        // divide em centavos: a última parcela absorve a diferença
+        function splitCents(total, n) {
+            const tc = Math.round(total * 100), b = Math.floor(tc / n);
+            return Array.from({ length: n }, (_, i) => (b + (i === n - 1 ? tc - b * n : 0)) / 100);
+        }
+        const currentScope = () => document.querySelector('input[name="txScope"]:checked')?.value || 'all';
+
+        function updateInstLabels() {
+            const payment = document.getElementById('txPayment').value;
+            const type = document.querySelector('input[name="txType"]:checked')?.value;
+            const isInst = payment === 'credito_parcelado' && type === 'expense';
+            const scope = editingGroup ? currentScope() : 'new';
+            document.getElementById('lbl-txValue').textContent = !isInst ? 'Valor' : (editingGroup && scope !== 'all') ? 'Valor desta parcela' : 'Valor total da compra';
+            document.getElementById('txInstallments').disabled = !!editingGroup && isInst && scope !== 'all';
+            updateInstHelper();
+        }
+        function onValueInput() { document.getElementById('txValue').dataset.dirty = '1'; updateInstHelper(); }
+        function onScopeChange() {
+            const val = document.getElementById('txValue');
+            if (editingGroup && !val.dataset.dirty) val.value = currentScope() === 'all' ? editingGroup.total : editingGroup.thisValue;
+            updateInstLabels();
+        }
+        function updateInstHelper() {
+            const el = document.getElementById('inst-helper');
+            if (!el) return;
+            const isInst = document.getElementById('txPayment').value === 'credito_parcelado' && document.querySelector('input[name="txType"]:checked')?.value === 'expense';
+            const v = parseFloat(document.getElementById('txValue').value);
+            if (!isInst || !(v > 0)) { el.textContent = ''; return; }
+            const scope = editingGroup ? currentScope() : 'new';
+            if (scope === 'one') { el.textContent = `Só a parcela ${editingGroup.k}/${editingGroup.n} muda.`; return; }
+            if (scope === 'following') {
+                const later = editingGroup.members.filter(m => instIdx(m) >= editingGroup.k).length;
+                el.textContent = `${later} parcela(s) de ${formatCurrency(v)} (esta e as seguintes).`; return;
+            }
+            const n = Math.min(48, Math.max(2, parseInt(document.getElementById('txInstallments').value) || 2));
+            const p = splitCents(v, n);
+            el.textContent = p[0] === p[n - 1] ? `${n} parcelas de ${formatCurrency(p[0])}` : `${n - 1} parcelas de ${formatCurrency(p[0])} + última de ${formatCurrency(p[n - 1])}`;
+        }
+
+        // Todas as parcelas: ajusta valor total, quantidade, datas e dados de todos os meses
+        function applyInstallmentsAll(orig, baseTx, count, ts) {
+            const gid = orig.installmentGroup;
+            const members = groupMembers(gid);
+            const k = instIdx(orig) || (members.findIndex(m => m.id === orig.id) + 1) || 1;
+            const values = splitCents(baseTx.value, count);
+            const dateChanged = baseTx.date !== orig.date;
+            const [ey, em, ed] = baseTx.date.split('-').map(Number);
+            const first = members.find(m => instIdx(m) === 1);
+            let by, bm, bd;
+            if (dateChanged || !first) { const dt = new Date(ey, em - 1 - (k - 1), 1); by = dt.getFullYear(); bm = dt.getMonth() + 1; bd = ed; }
+            else { [by, bm, bd] = first.date.split('-').map(Number); }
+            const byIdx = {};
+            members.forEach(m => { byIdx[instIdx(m)] = m; });
+            const common = { type: baseTx.type, desc: baseTx.desc, categoryId: baseTx.categoryId, userId: baseTx.userId, payment: baseTx.payment, cardId: baseTx.cardId, isFixed: false };
+            for (let i = 1; i <= count; i++) {
+                const ex = byIdx[i];
+                const date = (ex && !dateChanged) ? ex.date : addMonthsClamped(by, bm, bd, i - 1);
+                const fields = { ...common, value: values[i - 1], date, installmentInfo: `${i}/${count}`, installmentGroup: gid, updatedAt: ts };
+                if (ex) Object.assign(ex, fields);
+                else appData.transactions.push({ ...fields, id: generateId() });
+            }
+            members.forEach(m => { const i = instIdx(m); if (i < 1 || i > count) { m.deleted = true; m.updatedAt = ts; } });
+        }
+
+        // Esta e as próximas: mantém as anteriores; as seguintes recebem o mesmo valor
+        function applyInstallmentsFollowing(orig, baseTx, ts) {
+            const members = groupMembers(orig.installmentGroup);
+            const k = instIdx(orig);
+            const dateChanged = baseTx.date !== orig.date;
+            const [ey, em, ed] = baseTx.date.split('-').map(Number);
+            members.filter(m => instIdx(m) >= k).forEach(m => {
+                Object.assign(m, { desc: baseTx.desc, categoryId: baseTx.categoryId, userId: baseTx.userId, payment: baseTx.payment, cardId: baseTx.cardId, value: baseTx.value, updatedAt: ts });
+                if (dateChanged) m.date = addMonthsClamped(ey, em, ed, instIdx(m) - k);
+            });
+        }
+
+        async function deleteTransaction(id) {
+            const tx = appData.transactions.find(t => t.id === id);
+            if (!tx) return;
+            if (tx.installmentGroup && tx.payment === 'credito_parcelado' && tx.type === 'expense') {
+                const members = groupMembers(tx.installmentGroup);
+                const k = instIdx(tx);
+                const later = members.filter(m => instIdx(m) >= k);
+                const choice = await askChoice('Excluir parcela', `"${tx.desc}" (${tx.installmentInfo || 'parcela'}). O que você quer excluir?`, [
+                    { label: 'Somente esta parcela' },
+                    ...(later.length > 1 ? [{ label: `Esta e as próximas (${later.length})` }] : []),
+                    ...(members.length > 1 && later.length !== members.length ? [{ label: `Todas as parcelas (${members.length})`, cls: 'btn-magenta' }] : [])
+                ]);
+                if (choice < 0) return;
+                const labels = [];
+                labels.push([tx]);
+                if (later.length > 1) labels.push(later);
+                if (members.length > 1 && later.length !== members.length) labels.push(members);
+                const ts = nowTs();
+                labels[choice].forEach(t => { t.deleted = true; t.updatedAt = ts; });
+                saveToCloud(); renderData();
+                showToast(labels[choice].length > 1 ? `${labels[choice].length} parcelas excluídas.` : 'Parcela excluída.');
+                return;
+            }
+            deleteTransactionPlain(id);
+        }
 
         function generateId() { return Math.random().toString(36).substr(2, 9); }
 
@@ -1766,6 +2024,8 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
         }
 
         function openTransactionModal(editId = null) {
+            editingGroup = null;
+            delete document.getElementById('txValue').dataset.dirty;
             populateCategorySelect();
             populateCardSelect('');
             const form = document.getElementById('form-transaction');
@@ -1783,6 +2043,17 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                     document.getElementById('txUser').value = tx.userId;
                     document.getElementById('txPayment').value = tx.payment;
                     document.getElementById('txFixed').checked = tx.isFixed || false;
+                    if (tx.installmentGroup && tx.payment === 'credito_parcelado' && tx.type === 'expense') {
+                        const members = groupMembers(tx.installmentGroup);
+                        editingGroup = {
+                            gid: tx.installmentGroup, members, k: instIdx(tx) || 1,
+                            n: instTotalN(tx) || members.length || 2,
+                            total: members.reduce((a, m) => a + Math.round(m.value * 100), 0) / 100,
+                            thisValue: tx.value
+                        };
+                        document.getElementById('txValue').value = editingGroup.total;
+                        document.getElementById('txInstallments').value = editingGroup.n;
+                    }
                     const card = getCardForTx(tx);
                     if (card) document.getElementById('txCard').value = card.id;
                     document.getElementById('modal-tx-title').textContent = 'Editar Lançamento';
@@ -1809,6 +2080,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             const isInstallment = payment === 'credito_parcelado' && txType === 'expense';
 
             document.getElementById('installments-container').classList.toggle('hidden', !isInstallment);
+            document.getElementById('scope-container').classList.toggle('hidden', !(isInstallment && editingGroup));
             document.getElementById('card-container').classList.toggle('hidden', !isCredit);
             document.getElementById('fixed-container').classList.toggle('hidden', isInstallment || txType !== 'expense');
 
@@ -1820,6 +2092,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
                     sel.value = (cards.find(c => c.owner === user) || cards[0]).id;
                 }
             }
+            updateInstLabels();
         }
 
         function saveTransaction(e) {
@@ -1845,28 +2118,48 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 
             const ts = nowTs();
             const txId = document.getElementById('txId').value;
+            const count = Math.min(48, Math.max(2, parseInt(document.getElementById('txInstallments').value) || 2));
 
             if (txId) {
-                const idx = appData.transactions.findIndex(t => t.id === txId);
-                if (idx !== -1) appData.transactions[idx] = { ...appData.transactions[idx], ...baseTx, updatedAt: ts };
+                const orig = appData.transactions.find(t => t.id === txId);
+                if (orig) {
+                    if (editingGroup && isInstallment) {
+                        const scope = currentScope();
+                        if (scope === 'all') {
+                            const removed = editingGroup.members.filter(m => instIdx(m) > count).length;
+                            if (removed && !confirm(`Reduzir para ${count} parcelas vai excluir ${removed} parcela(s) do final. Continuar?`)) return;
+                            applyInstallmentsAll(orig, baseTx, count, ts);
+                        } else if (scope === 'following') {
+                            applyInstallmentsFollowing(orig, baseTx, ts);
+                        } else {
+                            Object.assign(orig, { ...baseTx, updatedAt: ts });
+                        }
+                    } else if (!editingGroup && isInstallment) {
+                        // lançamento comum virando parcelado: este vira a parcela 1
+                        const gid = generateId();
+                        const vals = splitCents(baseTx.value, count);
+                        const [y, m, d] = baseTx.date.split('-').map(Number);
+                        Object.assign(orig, { ...baseTx, value: vals[0], installmentInfo: `1/${count}`, installmentGroup: gid, updatedAt: ts });
+                        for (let i = 1; i < count; i++) {
+                            appData.transactions.push({ ...baseTx, id: generateId(), value: vals[i], date: addMonthsClamped(y, m, d, i), installmentInfo: `${i + 1}/${count}`, installmentGroup: gid, updatedAt: ts });
+                        }
+                    } else {
+                        const upd = { ...orig, ...baseTx, updatedAt: ts };
+                        if (!isInstallment) { delete upd.installmentGroup; delete upd.installmentInfo; }   // saiu do parcelamento
+                        const idx = appData.transactions.findIndex(t => t.id === txId);
+                        appData.transactions[idx] = upd;
+                    }
+                }
                 showToast("Lançamento Atualizado!");
             } else {
                 if (isInstallment) {
-                    const count = Math.min(48, Math.max(2, parseInt(document.getElementById('txInstallments').value) || 2));
                     // Divisão em centavos: a última parcela absorve a diferença
-                    const totalCents = Math.round(baseTx.value * 100);
-                    const baseCents = Math.floor(totalCents / count);
+                    const vals = splitCents(baseTx.value, count);
                     const [y, m, d] = baseTx.date.split('-').map(Number);
                     const groupId = generateId();
-
                     for (let i = 0; i < count; i++) {
-                        const cents = baseCents + (i === count - 1 ? totalCents - baseCents * count : 0);
-                        // Dia 29-31 em mês curto vira o último dia do mês (sem estourar para o seguinte)
-                        const dim = new Date(y, m - 1 + i + 1, 0).getDate();
-                        const dt = new Date(y, m - 1 + i, Math.min(d, dim));
-                        const strD = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, '0')}-${String(dt.getDate()).padStart(2, '0')}`;
                         appData.transactions.push({
-                            ...baseTx, id: generateId(), value: cents / 100, date: strD,
+                            ...baseTx, id: generateId(), value: vals[i], date: addMonthsClamped(y, m, d, i),
                             installmentInfo: `${i + 1}/${count}`, installmentGroup: groupId, updatedAt: ts
                         });
                     }
@@ -1880,7 +2173,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             saveToCloud(); renderData(); closeModal('modal-transaction'); 
         }
 
-        function deleteTransaction(id) {
+        function deleteTransactionPlain(id) {
             const tx = appData.transactions.find(t => t.id === id);
             if (!tx) return;
             const isOriginalFixed = tx.isFixed && !tx.parentFixedId;
@@ -2021,7 +2314,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             document.getElementById('set-user1').value = appData.settings.user1Name || 'Pessoa A';
             document.getElementById('set-user2').value = appData.settings.user2Name || 'Pessoa B';
             document.getElementById('set-enable-rollover').checked = appData.settings.enableRollover;
-            renderThemePicker(); syncModeRadios();
+            updateThemeLabel(); syncModeRadios();
             openModal('modal-settings');
         }
 
@@ -2109,6 +2402,7 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
 
             checkBudgetAlerts(catTotals);
             checkPaymentReminders(allMonthTxs);
+            applyNoticeDismissals();
 
             // Só desenha a tela que está visível (a troca de tela chama renderData de novo)
             if (activeView === 'view-dashboard') {
@@ -2569,7 +2863,9 @@ button:focus-visible,[role="button"]:focus-visible,a:focus-visible{outline:3px s
             setTopbar();
             if ('ResizeObserver' in window) new ResizeObserver(setTopbar).observe(hdr); else window.addEventListener('resize', setTopbar);
 
+            try { history.replaceState({ view: 'dashboard' }, ''); } catch (e) {}
             try { privacyMode = localStorage.getItem('fin_privacy') === '1'; } catch (e) {}
+            updateThemeLabel();
             applyPrivacy();
 
             initCharts();

@@ -4,7 +4,7 @@
  * - Google Apps Script (sincronização): nunca passa pelo cache.
  * Ao publicar uma versão nova, altere CACHE (ex.: v3) para limpar o cache antigo.
  */
-const CACHE = 'nossas-financas-v5';
+const CACHE = 'nossas-financas-v6';
 const SHELL = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {
